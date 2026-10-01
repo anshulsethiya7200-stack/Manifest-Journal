@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./icons/icon-512.png" alt="Manifest Journal Logo" width="120" height="120" />
+<img src="icon-512.png" alt="Manifest Journal Logo" width="120" height="120" />
 
 # Manifest Journal
 
