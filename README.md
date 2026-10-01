@@ -9,8 +9,6 @@
 A private, offline-first journaling and manifestation PWA — built for people who take their intentions seriously.
 
 [![PWA](https://img.shields.io/badge/PWA-ready-0b57d0?logo=googlechrome&logoColor=white)](https://web.dev/progressive-web-apps/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-1a0dab.svg)](./LICENSE)
-[![Material Design 3](https://img.shields.io/badge/UI-Material%20Design%203-0b57d0)](https://m3.material.io/)
 [![Local First](https://img.shields.io/badge/Storage-IndexedDB%20%2B%20OPFS-444746)](https://web.dev/storage-for-the-web/)
 [![No Server](https://img.shields.io/badge/Backend-None-success)](https://localfirstweb.dev/)
 
