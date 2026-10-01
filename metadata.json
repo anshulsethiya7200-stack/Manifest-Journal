@@ -1,0 +1,9 @@
+{
+  "name": "Manifest Journal",
+  "description": "A local-first journaling and manifestation app. Write, reflect, and make your goals real.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

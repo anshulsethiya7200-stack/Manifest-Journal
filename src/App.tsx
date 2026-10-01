@@ -1,0 +1,317 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { Profile, Goal, AppSettings, StorageEstimateInfo } from './types';
+import {
+  getProfile,
+  getAllGoals,
+  getStreak,
+  getAppSettings,
+  setSetting,
+  initializeDefaultGoalsIfEmpty,
+  checkStorageQuota,
+  getAllJournalEntries,
+  purgeSampleData,
+} from './lib/storage';
+import { applyTheme, applyAccentColor } from './lib/theme';
+import { TopBar, BottomNav } from './components/Navigation';
+import { Drawer } from './components/Drawer';
+import { OfflineIndicator } from './components/OfflineIndicator';
+
+import { CommitmentScreen } from './screens/CommitmentScreen';
+import { HomeScreen } from './screens/HomeScreen';
+import { GoalsScreen } from './screens/GoalsScreen';
+import { ScriptingScreen } from './screens/ScriptingScreen';
+import { JournalScreen } from './screens/JournalScreen';
+import { AlbumScreen } from './screens/AlbumScreen';
+import { TeleprompterScreen } from './screens/TeleprompterScreen';
+import { KnowledgeScreen } from './screens/KnowledgeScreen';
+import { SettingsScreen } from './screens/SettingsScreen';
+
+export default function App() {
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [streakCount, setStreakCount] = useState(0);
+  const [settings, setSettings] = useState<AppSettings>({ theme: 'system', accentColor: '#0b57d0' });
+  const [storageInfo, setStorageInfo] = useState<StorageEstimateInfo | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDark, setIsDark] = useState(false);
+
+  // Navigation State
+  const [currentRoute, setCurrentRoute] = useState<string>(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash) return hash;
+    return sessionStorage.getItem('manifest_active_tab') || 'home';
+  });
+  const [routeState, setRouteState] = useState<any>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  // Quick theme toggle handler (light <-> dark)
+  const handleQuickThemeToggle = useCallback(async () => {
+    const nextTheme: AppSettings['theme'] = isDark ? 'light' : 'dark';
+    const updated = { ...settings, theme: nextTheme };
+    setSettings(updated);
+    await setSetting('theme', nextTheme);
+    const darkNow = applyTheme(nextTheme);
+    setIsDark(darkNow);
+  }, [isDark, settings]);
+
+  // Apply theme & sacred accent whenever settings change
+  useEffect(() => {
+    const darkNow = applyTheme(settings.theme);
+    setIsDark(darkNow);
+    applyAccentColor(settings.accentColor);
+
+    if (settings.theme === 'system' && typeof window !== 'undefined' && window.matchMedia) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const listener = () => {
+        const sysDark = applyTheme('system');
+        setIsDark(sysDark);
+      };
+      mediaQuery.addEventListener('change', listener);
+      return () => mediaQuery.removeEventListener('change', listener);
+    }
+  }, [settings.theme, settings.accentColor]);
+
+  // Load initial data
+  const refreshData = useCallback(async () => {
+    try {
+      await purgeSampleData();
+      const p = await getProfile();
+      setProfile(p || null);
+
+      await initializeDefaultGoalsIfEmpty();
+      const g = await getAllGoals();
+      setGoals(g);
+
+      const s = await getStreak('scripting');
+      setStreakCount(s.count || 0);
+
+      const sett = await getAppSettings();
+      setSettings(sett);
+
+      const darkNow = applyTheme(sett.theme);
+      setIsDark(darkNow);
+      applyAccentColor(sett.accentColor);
+
+      const quota = await checkStorageQuota();
+      setStorageInfo(quota);
+
+      // Check on-open reminders safely if notifications are permitted
+      if ('Notification' in window && Notification.permission === 'granted') {
+        const entries = await getAllJournalEntries();
+        const nowMs = Date.now();
+        let shouldRemind = false;
+        if (entries.length > 0) {
+          const latest = entries.reduce((prev, curr) =>
+            new Date(curr.createdAt).getTime() > new Date(prev.createdAt).getTime() ? curr : prev
+          );
+          const diffHours = (nowMs - new Date(latest.createdAt).getTime()) / (1000 * 60 * 60);
+          if (diffHours >= 24) shouldRemind = true;
+        }
+
+        if (shouldRemind && 'serviceWorker' in navigator) {
+          navigator.serviceWorker.ready.then((reg) => {
+            reg.showNotification('📖 Time to journal your day!', {
+              body: 'Anchor what you accomplished today and keep your manifestation momentum active.',
+              icon: '/icons/icon-192.png',
+              tag: 'journal-reminder-onopen',
+            });
+          }).catch(() => {});
+        }
+      }
+    } catch (err) {
+      console.warn('Initial data load error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshData();
+  }, [refreshData]);
+
+  // Handle hash changes
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        setCurrentRoute(hash);
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const navigateTo = (route: string, state?: any) => {
+    setCurrentRoute(route);
+    setRouteState(state || null);
+    window.location.hash = `#${route}`;
+    if (['scripting', 'journal', 'album', 'teleprompter', 'home'].includes(route)) {
+      sessionStorage.setItem('manifest_active_tab', route);
+    }
+  };
+
+  // Profile Onboarding check:
+  // If not yet onboarded and not loading, show Commitment screen
+  const isCommitted = !!profile;
+
+  // Active Goals for Home
+  const todayGoal = goals.find((g) => g.type === 'today' && g.status === 'active');
+  const monthGoal = goals.find((g) => g.type === 'month' && g.status === 'active');
+
+  const getPageTitle = (route: string) => {
+    switch (route) {
+      case 'home':
+        return 'Manifest Journal';
+      case 'scripting':
+        return 'Scripting';
+      case 'journal':
+        return 'Journal';
+      case 'album':
+        return 'Album';
+      case 'teleprompter':
+        return 'Teleprompter';
+      case 'goals':
+        return 'Goals';
+      case 'knowledge':
+        return 'Knowledge';
+      case 'settings':
+        return 'Settings';
+      case 'commitment':
+        return 'Commitment';
+      default:
+        return 'Manifest Journal';
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#fcf9f8] dark:bg-[#111318] p-6 text-center">
+        <div className="w-16 h-16 rounded-3xl bg-accent text-white flex items-center justify-center shadow-xl animate-pulse mb-4">
+          <img src="/icons/icon-96.png" alt="Manifest" className="w-12 h-12" />
+        </div>
+        <p className="text-sm font-semibold hero-text">
+          Opening Your Sacred Space...
+        </p>
+      </div>
+    );
+  }
+
+  // Show Commitment onboarding if user hasn't committed yet
+  if (!isCommitted && currentRoute !== 'knowledge') {
+    return (
+      <div className="min-h-screen bg-[#fcf9f8] dark:bg-[#111318] ambient-gradient">
+        <CommitmentScreen
+          existingProfile={null}
+          onComplete={async (newProfile) => {
+            setProfile(newProfile);
+            await refreshData();
+            navigateTo('home');
+          }}
+        />
+      </div>
+    );
+  }
+
+  const showBottomNav = ['home', 'scripting', 'journal', 'album', 'teleprompter'].includes(
+    currentRoute
+  );
+
+  return (
+    <div className="min-h-screen flex flex-col bg-[#fcf9f8] dark:bg-[#111318] ambient-gradient text-[#1b1b1c] dark:text-[#e2e2e9] transition-colors">
+      <OfflineIndicator />
+
+      {/* Top Application Bar */}
+      <TopBar
+        title={getPageTitle(currentRoute)}
+        onOpenDrawer={() => setIsDrawerOpen(true)}
+        streakCount={streakCount}
+        profile={profile}
+        onAvatarClick={() => navigateTo('settings')}
+        isDark={isDark}
+        onToggleTheme={handleQuickThemeToggle}
+      />
+
+      {/* Navigation Slide-Over Drawer */}
+      <Drawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        activeRoute={currentRoute}
+        onNavigate={(route) => navigateTo(route)}
+        profile={profile}
+        storageInfo={storageInfo}
+        streakCount={streakCount}
+      />
+
+      {/* Main Content Viewport */}
+      <main className="flex-1 w-full max-w-md mx-auto px-4 pt-4">
+        {currentRoute === 'home' && (
+          <HomeScreen
+            profile={profile}
+            todayGoal={todayGoal}
+            monthGoal={monthGoal}
+            streakCount={streakCount}
+            onNavigate={navigateTo}
+            onRefreshData={refreshData}
+          />
+        )}
+
+        {currentRoute === 'scripting' && (
+          <ScriptingScreen initialState={routeState} onRefreshData={refreshData} />
+        )}
+
+        {currentRoute === 'journal' && (
+          <JournalScreen
+            initialState={routeState}
+            onRefreshData={refreshData}
+          />
+        )}
+
+        {currentRoute === 'album' && (
+          <AlbumScreen
+            initialOpenCamera={routeState?.openCamera || false}
+            onRefreshData={refreshData}
+          />
+        )}
+
+        {currentRoute === 'teleprompter' && (
+          <TeleprompterScreen
+            onRecordingSaved={refreshData}
+            onNavigateToAlbum={() => navigateTo('album')}
+          />
+        )}
+
+        {currentRoute === 'goals' && (
+          <GoalsScreen onRefreshData={refreshData} />
+        )}
+
+        {currentRoute === 'knowledge' && (
+          <KnowledgeScreen />
+        )}
+
+        {currentRoute === 'settings' && (
+          <SettingsScreen
+            profile={profile}
+            onOpenCovenant={() => navigateTo('commitment')}
+            onSettingsChanged={(newSett) => setSettings(newSett)}
+          />
+        )}
+
+        {currentRoute === 'commitment' && (
+          <CommitmentScreen
+            existingProfile={profile}
+            isReadOnly={true}
+            onComplete={() => navigateTo('settings')}
+          />
+        )}
+      </main>
+
+      {/* Fixed Bottom Navigation Tabs */}
+      {showBottomNav && (
+        <BottomNav
+          activeTab={currentRoute}
+          onTabChange={(tab) => navigateTo(tab)}
+        />
+      )}
+    </div>
+  );
+}

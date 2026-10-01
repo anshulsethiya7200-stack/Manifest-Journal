@@ -1,0 +1,105 @@
+{
+  "name": "Manifest Journal",
+  "short_name": "Manifest",
+  "description": "A local-first journaling and manifestation app. Write, reflect, and make your goals real.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#0b57d0",
+  "theme_color": "#0b57d0",
+  "lang": "en",
+  "dir": "ltr",
+  "id": "manifest-journal-pwa-v1",
+  "categories": ["lifestyle", "productivity", "health"],
+  "screenshots": [
+    {
+      "src": "/screenshots/home-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Home screen showing daily and monthly goals"
+    },
+    {
+      "src": "/screenshots/journal-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Journal screen with time-anchored entries"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/icons/icon-48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Journal Entry",
+      "short_name": "Journal",
+      "description": "Open today's journal and add a new entry",
+      "url": "/#journal",
+      "icons": [{ "src": "/icons/shortcut-journal.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Write Script",
+      "short_name": "Script",
+      "description": "Open today's manifestation scripting page",
+      "url": "/#scripting",
+      "icons": [{ "src": "/icons/shortcut-script.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "View Goals",
+      "short_name": "Goals",
+      "description": "Check your goals for today, month, and beyond",
+      "url": "/#goals",
+      "icons": [{ "src": "/icons/shortcut-goals.png", "sizes": "192x192" }]
+    }
+  ]
+}
