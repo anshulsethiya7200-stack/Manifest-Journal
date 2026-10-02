@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ScriptPage } from '../types';
 import {
   getScriptPagesByDate,
@@ -6,6 +6,7 @@ import {
   getStreak,
   updateScriptingStreak,
 } from '../lib/storage';
+import { sanitizeMultilineText } from '../lib/sanitize';
 import {
   Flame,
   Sparkles,
@@ -138,9 +139,9 @@ export const ScriptingScreen: React.FC<ScriptingScreenProps> = ({ initialState, 
       </div>
 
       {/* Notebook Writing Pad */}
-      <div className="rounded-3xl shadow-sm border border-slate-200 dark:border-white/10 overflow-hidden bg-white dark:bg-[#101217]">
+      <div className="rounded-3xl shadow-sm border border-slate-200 dark:border-white/15 overflow-hidden bg-white dark:bg-black">
         {/* Notebook Top Margin Line & Header */}
-        <div className="px-6 pt-4 pb-2 border-b border-slate-200 dark:border-white/10 flex items-center justify-between text-xs font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wider bg-white/50 dark:bg-black/20">
+        <div className="px-6 pt-4 pb-2 border-b border-slate-200 dark:border-white/15 flex items-center justify-between text-xs font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wider bg-white/50 dark:bg-black">
           <span>PRESENT MOMENT AFFIRMATION</span>
           <span className="normal-case">Today, {nowTime}</span>
         </div>
@@ -157,7 +158,7 @@ export const ScriptingScreen: React.FC<ScriptingScreenProps> = ({ initialState, 
         </div>
 
         {/* Bottom Page Navigation & Complete Toolbar */}
-        <div className="p-4 bg-slate-50 dark:bg-[#16181d] border-t border-slate-200 dark:border-white/10 flex items-center justify-between gap-2">
+        <div className="p-4 bg-slate-50 dark:bg-black border-t border-slate-200 dark:border-white/15 flex items-center justify-between gap-2">
           {/* Page indicator & pagination */}
           <div className="flex items-center gap-2">
             <button
@@ -216,7 +217,7 @@ export const ScriptingScreen: React.FC<ScriptingScreenProps> = ({ initialState, 
       )}
 
       {/* Guidance Note */}
-      <div className="bg-[#f0f4ff]/50 dark:bg-slate-900/40 p-4 rounded-2xl border border-black/5 dark:border-white/5 text-xs text-slate-500 dark:text-slate-400 space-y-1">
+      <div className="bg-[#f0f4ff]/50 dark:bg-black p-4 rounded-2xl border border-black/5 dark:border-white/15 text-xs text-slate-500 dark:text-slate-400 space-y-1">
         <p className="font-semibold text-slate-700 dark:text-slate-300">
           The Sacred Scripting Rule:
         </p>

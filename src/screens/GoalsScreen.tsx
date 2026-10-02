@@ -176,7 +176,7 @@ export const GoalsScreen: React.FC<GoalsScreenProps> = ({ onRefreshData }) => {
           return (
             <div
               key={type}
-              className="bg-white dark:bg-[#1d2024] p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-xs space-y-3"
+              className="bg-white dark:bg-black p-5 rounded-3xl border border-black/5 dark:border-white/15 shadow-xs space-y-3"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -198,7 +198,7 @@ export const GoalsScreen: React.FC<GoalsScreenProps> = ({ onRefreshData }) => {
 
               {activeGoal ? (
                 <div className="space-y-3">
-                  <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium bg-[#f0f4ff]/40 dark:bg-slate-900/40 p-3 rounded-2xl border border-black/5 dark:border-white/5">
+                  <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium bg-[#f0f4ff]/40 dark:bg-black p-3 rounded-2xl border border-black/5 dark:border-white/15">
                     "{activeGoal.text}"
                   </p>
 
@@ -259,7 +259,7 @@ export const GoalsScreen: React.FC<GoalsScreenProps> = ({ onRefreshData }) => {
       {/* Completion Evaluation Dialog */}
       {dialogGoal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in">
-          <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-[#1d2024] p-6 shadow-2xl text-center space-y-4">
+          <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-black border border-black/5 dark:border-white/15 p-6 shadow-2xl text-center space-y-4">
             <div className="w-14 h-14 mx-auto rounded-full bg-accent-container text-accent flex items-center justify-center">
               <Sparkles className="w-7 h-7 text-accent" />
             </div>
@@ -294,7 +294,7 @@ export const GoalsScreen: React.FC<GoalsScreenProps> = ({ onRefreshData }) => {
       {/* Edit / Create Goal Sheet */}
       {editingGoal && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in">
-          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-[#1d2024] p-6 shadow-2xl space-y-4">
+          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-black border border-black/5 dark:border-white/15 p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-base text-[#1b1b1c] dark:text-white flex items-center gap-2">
                 <Target className="w-5 h-5 text-accent" />

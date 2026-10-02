@@ -292,7 +292,7 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
           {/* List of Anchored Moment Cards */}
           <div className="space-y-4">
             {todayEntries.length === 0 ? (
-              <div className="text-center py-16 bg-white dark:bg-[#1d2024] rounded-3xl border border-dashed border-slate-200 dark:border-slate-700 p-6 space-y-3">
+              <div className="text-center py-16 bg-white dark:bg-black rounded-3xl border border-dashed border-slate-200 dark:border-white/15 p-6 space-y-3">
                 <div className="w-12 h-12 mx-auto rounded-full bg-accent-container flex items-center justify-center text-accent">
                   <Clock className="w-6 h-6" />
                 </div>
@@ -313,7 +313,7 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
               todayEntries.map((entry) => (
                 <div
                   key={entry.id}
-                  className="bg-white dark:bg-[#1d2024] p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-xs space-y-3 relative group"
+                  className="bg-white dark:bg-black p-5 rounded-3xl border border-black/5 dark:border-white/15 shadow-xs space-y-3 relative group"
                 >
                   <div className="flex items-center justify-between">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-container text-accent text-xs font-bold">
@@ -393,14 +393,14 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
 
           <div className="space-y-3">
             {allEntries.length === 0 ? (
-              <div className="text-center py-16 bg-white dark:bg-[#1d2024] rounded-3xl border border-dashed border-slate-200 dark:border-slate-700 p-6 space-y-2">
+              <div className="text-center py-16 bg-white dark:bg-black rounded-3xl border border-dashed border-slate-200 dark:border-white/15 p-6 space-y-2">
                 <p className="text-xs text-slate-400">No historical moments recorded yet.</p>
               </div>
             ) : (
               allEntries.map((entry) => (
                 <div
                   key={entry.id}
-                  className="bg-white dark:bg-[#1d2024] p-4 rounded-2xl border border-black/5 dark:border-white/5 space-y-2 shadow-2xs"
+                  className="bg-white dark:bg-black p-4 rounded-2xl border border-black/5 dark:border-white/15 space-y-2 shadow-2xs"
                 >
                   <div className="flex items-center justify-between text-xs text-slate-500">
                     <span className="font-bold text-accent">
@@ -430,7 +430,7 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
       {/* Add Moment Sheet / Modal */}
       {isSheetOpen && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in">
-          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-[#1d2024] p-6 shadow-2xl space-y-4">
+          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-black border border-black/5 dark:border-white/15 p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-base hero-text flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-accent" />

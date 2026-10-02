@@ -2,8 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import SignaturePad from 'signature_pad';
 import { Profile, Gender } from '../types';
 import { saveProfile } from '../lib/storage';
+import { sanitizeText, sanitizeMultilineText } from '../lib/sanitize';
 import {
   Camera,
+  Upload,
+  Image as ImageIcon,
+  X,
   Volume2,
   VolumeX,
   RotateCcw,
@@ -44,10 +48,75 @@ export const CommitmentScreen: React.FC<CommitmentScreenProps> = ({
   const [signatureData, setSignatureData] = useState<string>(existingProfile?.signature || '');
   const [isSpeaking, setIsSpeaking] = useState(false);
 
+  // Live Selfie Camera Modal State
+  const [isSelfieCameraOpen, setIsSelfieCameraOpen] = useState(false);
+  const selfieVideoRef = useRef<HTMLVideoElement | null>(null);
+  const selfieStreamRef = useRef<MediaStream | null>(null);
+
   // Signature Pad ref
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const signaturePadInstance = useRef<SignaturePad | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Strict Media Stream Cleanup on unmount for selfie camera
+  const stopSelfieCamera = () => {
+    if (selfieStreamRef.current) {
+      selfieStreamRef.current.getTracks().forEach((track) => {
+        try {
+          track.stop();
+        } catch (e) {
+          console.warn('Selfie track stop error:', e);
+        }
+      });
+      selfieStreamRef.current = null;
+    }
+    setIsSelfieCameraOpen(false);
+  };
+
+  useEffect(() => {
+    return () => {
+      stopSelfieCamera();
+    };
+  }, []);
+
+  // Launch live selfie camera
+  const startSelfieCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user', width: 720, height: 720 },
+      });
+      selfieStreamRef.current = stream;
+      setIsSelfieCameraOpen(true);
+      setTimeout(() => {
+        if (selfieVideoRef.current) {
+          selfieVideoRef.current.srcObject = stream;
+        }
+      }, 100);
+    } catch (err) {
+      console.warn('Selfie camera error:', err);
+      alert('Could not access front camera. Please allow camera permissions or upload a profile picture.');
+    }
+  };
+
+  // Capture frame from selfie camera
+  const captureSelfiePhoto = () => {
+    if (!selfieVideoRef.current) return;
+    const video = selfieVideoRef.current;
+    const canvas = document.createElement('canvas');
+    const size = Math.min(video.videoWidth || 480, video.videoHeight || 480);
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      // Center crop square
+      const startX = ((video.videoWidth || size) - size) / 2;
+      const startY = ((video.videoHeight || size) - size) / 2;
+      ctx.drawImage(video, startX, startY, size, size, 0, 0, size, size);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
+      setSelfie(dataUrl);
+    }
+    stopSelfieCamera();
+  };
 
   // Initialize signature pad on step 2
   useEffect(() => {
@@ -154,12 +223,12 @@ export const CommitmentScreen: React.FC<CommitmentScreenProps> = ({
 
     const profile: Profile = {
       id: 'user-profile',
-      name: name.trim() || 'Manifestor',
-      dob,
+      name: sanitizeText(name) || 'Manifestor',
+      dob: sanitizeText(dob),
       gender,
       selfie,
       pledgeText: HARDCODED_PLEDGE,
-      quitClause: quitClause.trim(),
+      quitClause: sanitizeMultilineText(quitClause),
       signature: finalSignature,
       committedAt: new Date().toISOString(),
     };
@@ -179,7 +248,7 @@ export const CommitmentScreen: React.FC<CommitmentScreenProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#fcf9f8] dark:bg-[#111318] text-[#1b1b1c] dark:text-[#e2e2e9] pb-24">
+    <div className="min-h-screen bg-[#fcf9f8] dark:bg-black text-[#1b1b1c] dark:text-white pb-24">
       {/* Stepper Progress Header */}
       <div className="max-w-md mx-auto px-6 pt-6 pb-2">
         <div className="flex items-center justify-between text-xs font-semibold text-slate-500 mb-2">
@@ -221,34 +290,58 @@ export const CommitmentScreen: React.FC<CommitmentScreenProps> = ({
             </div>
 
             {/* Form Card */}
-            <div className="bg-white dark:bg-[#1d2024] p-6 rounded-3xl shadow-sm border border-black/5 dark:border-white/5 space-y-6">
-              {/* Selfie Avatar Circle */}
-              <div className="flex justify-center">
+            <div className="bg-white dark:bg-black p-6 rounded-3xl shadow-sm border border-black/5 dark:border-white/15 space-y-6">
+              {/* Selfie Avatar Preview & Explicit Dual Actions */}
+              <div className="flex flex-col items-center gap-4">
                 <div className="relative">
-                  <div className="w-28 h-28 rounded-full border-2 border-dashed border-accent-subtle flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-slate-800/40">
+                  <div className="w-28 h-28 rounded-full border-2 border-dashed border-accent-subtle flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-black/60 shadow-sm">
                     {selfie ? (
-                      <img src={selfie} alt="Selfie" className="w-full h-full object-cover" />
+                      <img src={selfie} alt="Profile preview" className="w-full h-full object-cover" />
                     ) : (
                       <User className="w-12 h-12 text-slate-300 dark:text-slate-600" />
                     )}
                   </div>
+                  {selfie && (
+                    <button
+                      type="button"
+                      onClick={() => setSelfie('')}
+                      className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-rose-600 text-white flex items-center justify-center shadow hover:bg-rose-700 transition"
+                      title="Remove picture"
+                      aria-label="Remove picture"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Two Distinct Explicit Buttons */}
+                <div className="grid grid-cols-2 gap-2.5 w-full max-w-xs">
+                  <button
+                    type="button"
+                    onClick={startSelfieCamera}
+                    className="py-2.5 px-3 rounded-2xl bg-accent hover-bg-accent text-white text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition active:scale-95"
+                  >
+                    <Camera className="w-4 h-4 stroke-[2.2]" />
+                    <span>Take a selfie</span>
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="absolute bottom-0 right-0 w-9 h-9 rounded-full bg-accent text-white flex items-center justify-center shadow-lg hover-bg-accent active:scale-95 transition"
-                    aria-label="Upload or take selfie photo"
+                    className="py-2.5 px-3 rounded-2xl bg-accent-container text-accent border border-accent-subtle text-xs font-bold flex items-center justify-center gap-2 shadow-2xs hover:opacity-90 transition active:scale-95"
                   >
-                    <Camera className="w-4 h-4" />
+                    <Upload className="w-4 h-4 stroke-[2.2]" />
+                    <span>Upload profile picture</span>
                   </button>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    capture="user"
-                    className="hidden"
-                    onChange={handleSelfieChange}
-                  />
                 </div>
+
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleSelfieChange}
+                />
               </div>
 
               {/* Name Input */}
@@ -340,7 +433,7 @@ export const CommitmentScreen: React.FC<CommitmentScreenProps> = ({
             </div>
 
             {/* Pledge Card */}
-            <div className="bg-white dark:bg-[#1d2024] p-6 rounded-3xl shadow-sm border border-black/5 dark:border-white/5 space-y-4">
+            <div className="bg-white dark:bg-black p-6 rounded-3xl shadow-sm border border-black/5 dark:border-white/15 space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <span className="text-xs font-bold text-accent uppercase tracking-wider flex items-center gap-1.5">
                   <Shield className="w-4 h-4" />
@@ -478,7 +571,7 @@ export const CommitmentScreen: React.FC<CommitmentScreenProps> = ({
               </p>
             </div>
 
-            <div className="bg-white dark:bg-[#1d2024] p-5 rounded-3xl shadow-sm border border-black/5 dark:border-white/5 text-left text-xs space-y-2">
+            <div className="bg-white dark:bg-black p-5 rounded-3xl shadow-sm border border-black/5 dark:border-white/15 text-left text-xs space-y-2">
               <div className="flex justify-between text-slate-500">
                 <span>Committed At:</span>
                 <span className="font-semibold text-slate-700 dark:text-slate-200">
@@ -520,6 +613,61 @@ export const CommitmentScreen: React.FC<CommitmentScreenProps> = ({
           </div>
         )}
       </div>
+
+      {/* Live Selfie Camera Viewfinder Modal */}
+      {isSelfieCameraOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in">
+          <div className="w-full max-w-sm rounded-3xl bg-black border border-white/20 p-5 shadow-2xl flex flex-col items-center space-y-4 text-white">
+            <div className="w-full flex items-center justify-between pb-2 border-b border-white/10">
+              <span className="text-xs font-bold flex items-center gap-1.5 text-accent">
+                <Camera className="w-4 h-4 text-accent" />
+                <span>Take Your Covenant Selfie</span>
+              </span>
+              <button
+                type="button"
+                onClick={stopSelfieCamera}
+                className="p-1.5 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Circular Viewfinder */}
+            <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-accent shadow-2xl bg-black">
+              <video
+                ref={selfieVideoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full h-full object-cover scale-x-[-1]"
+              />
+              <div className="absolute inset-0 border-2 border-dashed border-white/40 rounded-full pointer-events-none" />
+            </div>
+
+            <p className="text-[11px] text-slate-300 text-center max-w-xs">
+              Align your face within the sacred circle and tap capture.
+            </p>
+
+            <div className="w-full flex gap-3 pt-2">
+              <button
+                type="button"
+                onClick={stopSelfieCamera}
+                className="flex-1 py-3 rounded-full border border-white/20 text-xs font-semibold hover:bg-white/10 transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={captureSelfiePhoto}
+                className="flex-1 py-3 rounded-full bg-accent hover-bg-accent text-white font-bold text-xs shadow-lg flex items-center justify-center gap-1.5 active:scale-95 transition"
+              >
+                <Camera className="w-4 h-4 stroke-[2.5]" />
+                <span>Capture Photo</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

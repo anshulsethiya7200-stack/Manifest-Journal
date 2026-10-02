@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { TeleprompterScript, AlbumMedia } from '../types';
 import { saveTeleprompterScript, saveAlbumMedia } from '../lib/storage';
 import { saveMediaFile } from '../lib/opfs';
+import { sanitizeText, sanitizeMultilineText } from '../lib/sanitize';
 import {
   Play,
   Pause,
@@ -75,14 +76,21 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
       animationFrameIdRef.current = null;
     }
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current.getTracks().forEach((track) => {
+        try {
+          track.stop();
+        } catch (e) {
+          console.warn('Track stop error:', e);
+        }
+      });
       streamRef.current = null;
     }
   };
 
   // Launch Teleprompter Mode
   const startTeleprompterSession = async () => {
-    if (!scriptText.trim()) {
+    const cleanContent = sanitizeMultilineText(scriptText).trim();
+    if (!cleanContent) {
       alert('Please enter or select a script to speak.');
       return;
     }
@@ -102,8 +110,8 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
       // Save script to IDB
       const scriptRecord: TeleprompterScript = {
         id: crypto.randomUUID(),
-        title: scriptTitle || 'Spoken Affirmation',
-        content: scriptText,
+        title: sanitizeText(scriptTitle) || 'Spoken Affirmation',
+        content: cleanContent,
         speed,
         createdAt: new Date().toISOString(),
       };
@@ -170,8 +178,11 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
       lastTime = time;
 
       if (!isPaused && scrollContainerRef.current) {
-        // Base scroll pixels per second = 28 * speed
-        const pixelsToScroll = 28 * speed * delta;
+        // Recalibrated auto-scrolling speed calculation algorithm:
+        // At lowest setting (0.5x), provides a buttery-smooth, comfortably slow, and easily readable pace (~8.5 px/sec) without rushing the speaker.
+        const basePixelsPerSec = 9.5;
+        const speedMultiplier = Math.pow(speed / 0.5, 1.25);
+        const pixelsToScroll = basePixelsPerSec * speedMultiplier * delta;
         scrollPosRef.current += pixelsToScroll;
         scrollContainerRef.current.scrollTop = scrollPosRef.current;
 
@@ -242,7 +253,7 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
                   className={`px-3 py-1.5 rounded-full text-xs font-semibold transition ${
                     scriptTitle === ps.title
                       ? 'bg-accent text-white shadow-xs'
-                      : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100'
+                      : 'bg-white dark:bg-black border border-slate-200 dark:border-white/15 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-zinc-900'
                   }`}
                 >
                   {ps.title}
@@ -252,7 +263,7 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
           </div>
 
           {/* Script Editor Card */}
-          <div className="bg-white dark:bg-[#1d2024] p-5 rounded-3xl border border-black/5 dark:border-white/5 shadow-xs space-y-4">
+          <div className="bg-white dark:bg-black p-5 rounded-3xl border border-black/5 dark:border-white/15 shadow-xs space-y-4">
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                 Script Title
@@ -262,7 +273,7 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
                 value={scriptTitle}
                 onChange={(e) => setScriptTitle(e.target.value)}
                 placeholder="Title your affirmation..."
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold focus:outline-hidden focus:ring-2 ring-accent"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/15 bg-white dark:bg-black text-slate-900 dark:text-white text-xs font-semibold focus:outline-hidden focus:ring-2 ring-accent"
               />
             </div>
 
@@ -277,12 +288,12 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
                 rows={5}
                 value={scriptText}
                 onChange={(e) => setScriptText(e.target.value)}
-                className="w-full p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm leading-relaxed focus:outline-hidden focus:ring-2 ring-accent"
+                className="w-full p-4 rounded-2xl border border-slate-200 dark:border-white/15 bg-white dark:bg-black text-slate-900 dark:text-white text-sm leading-relaxed focus:outline-hidden focus:ring-2 ring-accent"
               />
             </div>
 
             {/* Speed Controller */}
-            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-white/10">
               <div className="flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300">
                 <span className="flex items-center gap-1.5">
                   <Sliders className="w-3.5 h-3.5 text-accent" />
@@ -319,21 +330,8 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
           </button>
         </div>
       ) : (
-        /* RECORDING / OVERLAY MODE */
-        <div className="fixed inset-0 z-50 bg-black flex flex-col justify-between p-4 text-white">
-          {/* Top Bar */}
-          <div className="flex items-center justify-between z-20">
-            <span className="text-xs font-semibold px-3 py-1 bg-black/60 rounded-full border border-white/20 backdrop-blur-xs">
-              {scriptTitle} · {speed.toFixed(1)}x
-            </span>
-            <button
-              onClick={finishRecording}
-              className="px-3 py-1.5 rounded-full bg-white/20 text-xs font-semibold hover:bg-white/30"
-            >
-              Exit
-            </button>
-          </div>
-
+        /* RECORDING / OVERLAY MODE: Repositioned to absolute top of viewport adjacent to front camera area */
+        <div className="fixed inset-0 z-50 bg-black flex flex-col justify-between text-white overflow-hidden animate-in fade-in">
           {/* Video Feed Background */}
           <div className="absolute inset-0 z-0 overflow-hidden">
             <video
@@ -343,39 +341,60 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
               muted
               className="w-full h-full object-cover"
             />
-            {/* Contrast Scrim for Text Legibility */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/65" />
+            {/* Contrast Scrim for Text Legibility: Stronger at top right beneath camera notch */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/40 to-black/85" />
           </div>
 
-          {/* Center Scrolling Script Overlay */}
-          <div
-            ref={scrollContainerRef}
-            className="relative z-10 flex-1 overflow-y-auto no-scrollbar max-w-lg mx-auto w-full px-6 py-24 text-center select-none"
-            style={{ scrollBehavior: 'auto' }}
-          >
-            <div className="space-y-4">
-              <p className="text-xl sm:text-2xl font-bold leading-relaxed tracking-wide text-white/70">
-                {wordsRef.current.map((word, idx) => {
-                  const isCurrent = idx === currentWordIndex;
-                  return (
-                    <span
-                      key={idx}
-                      className={`inline-block mx-1 transition-colors duration-150 ${
-                        isCurrent
-                          ? 'text-amber-300 font-extrabold scale-110 drop-shadow-[0_0_12px_rgba(255,234,0,0.8)]'
-                          : 'text-white/80'
-                      }`}
-                    >
-                      {word}
-                    </span>
-                  );
-                })}
-              </p>
+          {/* Top Bar with Camera Eye-Level Badge */}
+          <div className="relative z-20 flex items-center justify-between px-4 pt-3 pb-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold px-3 py-1 bg-black/80 rounded-full border border-white/20 backdrop-blur-md text-amber-300 flex items-center gap-1.5 shadow">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Camera Eye-Level</span>
+              </span>
+              <span className="text-xs font-semibold px-2.5 py-1 bg-black/60 rounded-full border border-white/15 backdrop-blur-xs text-white/90">
+                {speed.toFixed(1)}x pace
+              </span>
+            </div>
+            <button
+              onClick={finishRecording}
+              className="px-3.5 py-1.5 rounded-full bg-white/20 text-xs font-semibold hover:bg-white/30 backdrop-blur-xs active:scale-95 transition"
+            >
+              Exit
+            </button>
+          </div>
+
+          {/* Top-Pinned Scrolling Script Overlay: Directly adjacent to front camera area */}
+          <div className="relative z-20 w-full max-w-lg mx-auto px-4 pt-1">
+            <div
+              ref={scrollContainerRef}
+              className="h-[36vh] sm:h-[40vh] overflow-y-auto no-scrollbar rounded-2xl bg-black/65 backdrop-blur-md border border-white/15 p-5 text-center select-none shadow-2xl"
+              style={{ scrollBehavior: 'auto' }}
+            >
+              <div className="py-6">
+                <p className="text-xl sm:text-2xl font-bold leading-relaxed tracking-wide text-white/70">
+                  {wordsRef.current.map((word, idx) => {
+                    const isCurrent = idx === currentWordIndex;
+                    return (
+                      <span
+                        key={idx}
+                        className={`inline-block mx-1 transition-all duration-150 ${
+                          isCurrent
+                            ? 'text-amber-300 font-extrabold scale-110 drop-shadow-[0_0_14px_rgba(255,234,0,0.9)]'
+                            : 'text-white/85'
+                        }`}
+                      >
+                        {word}
+                      </span>
+                    );
+                  })}
+                </p>
+              </div>
             </div>
           </div>
 
           {/* Bottom Action Controls */}
-          <div className="relative z-20 flex items-center justify-center gap-6 pb-6">
+          <div className="relative z-20 flex items-center justify-center gap-6 pb-8 pt-4">
             {!isRecording ? (
               <button
                 onClick={beginRecording}

@@ -11,6 +11,7 @@ import {
   HardDrive,
   Sparkles,
   Flame,
+  Compass,
 } from 'lucide-react';
 
 interface DrawerProps {
@@ -21,6 +22,7 @@ interface DrawerProps {
   profile: Profile | null;
   storageInfo: StorageEstimateInfo | null;
   streakCount: number;
+  onOpenGuide?: () => void;
 }
 
 export const Drawer: React.FC<DrawerProps> = ({
@@ -31,6 +33,7 @@ export const Drawer: React.FC<DrawerProps> = ({
   profile,
   storageInfo,
   streakCount,
+  onOpenGuide,
 }) => {
   if (!isOpen) return null;
 
@@ -48,7 +51,7 @@ export const Drawer: React.FC<DrawerProps> = ({
       />
 
       {/* Drawer Surface */}
-      <div className="relative w-80 max-w-[85vw] bg-white dark:bg-[#191c20] text-[#1b1b1c] dark:text-[#e2e2e9] h-full shadow-2xl z-10 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-left duration-300">
+      <div className="relative w-80 max-w-[85vw] bg-white dark:bg-black border-r border-black/5 dark:border-white/15 text-[#1b1b1c] dark:text-white h-full shadow-2xl z-10 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-left duration-300">
         <div>
           {/* Header Profile Section */}
           <div className="p-6 hero-gradient border-b border-black/5 dark:border-white/5">
@@ -161,6 +164,18 @@ export const Drawer: React.FC<DrawerProps> = ({
                   <FileCheck className={`w-4 h-4 ${activeRoute === 'commitment' ? 'text-white' : 'text-accent'}`} />
                   <span>View Covenant</span>
                 </button>
+                {onOpenGuide && (
+                  <button
+                    onClick={() => {
+                      onOpenGuide();
+                      onClose();
+                    }}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition hover:bg-black/5 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300"
+                  >
+                    <Compass className="w-4 h-4 text-accent" />
+                    <span>Interactive App Guide</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -190,13 +205,17 @@ export const Drawer: React.FC<DrawerProps> = ({
         </div>
 
         {/* Footer info: storage */}
-        <div className="p-4 border-t border-black/5 dark:border-white/5 bg-slate-50/50 dark:bg-slate-900/50 text-xs">
+        <div className="p-4 border-t border-black/5 dark:border-white/15 bg-slate-50/50 dark:bg-black text-xs">
           <div className="flex items-center justify-between text-slate-500 mb-1.5">
             <span className="flex items-center gap-1.5 font-medium">
               <HardDrive className="w-3.5 h-3.5 text-accent" />
-              Local Storage
+              Storage Used/Available
             </span>
-            <span>{storageInfo ? `${storageInfo.remainingMb} MB free` : 'Checking...'}</span>
+            <span className="font-mono text-[11px]">
+              {storageInfo
+                ? `${((storageInfo.usage || 0) / (1024 * 1024)).toFixed(1)} MB / ${storageInfo.remainingMb} MB`
+                : 'Checking...'}
+            </span>
           </div>
           {storageInfo && (
             <div className="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">

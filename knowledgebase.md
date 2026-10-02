@@ -108,7 +108,32 @@ Zero backend, zero authentication, zero server. 100% of user data lives in the u
    - Client-side full data export to ZIP (JSON + binary media).
    - Notification permissions & reminders.
    - Clear all data with safety confirmation.
-   - Community links (GitHub & Buy Me a Coffee).
-10. **Navigation**:
+   - Community links: GitHub repository (`https://github.com/anshulsethiya7200-stack/Manifest-Journal`) & Buy Me a Coffee (`https://buymeacoffee.com/anshuljain`).
+10. **Navigation & Interactive Guide**:
     - Fixed bottom tab bar (Scripting, Journal, Album, Teleprompter).
     - Top App Bar with hamburger drawer (Home, Goals, Knowledge, Commitment, Settings).
+    - **Interactive User Guide (`InteractiveUserGuide`)**: Animated step-by-step onboarding walkthrough accessible from the navigation Drawer and Knowledge screen covering core philosophy, covenant sealing, multi-horizon goals, 3-6-9 scripting, spoken teleprompter, and sacred frequencies.
+
+---
+
+## Client-Side Security & Data Protection Architecture
+- **Strict Input Sanitization & XSS Defense (`src/lib/sanitize.ts`)**:
+  - DOMPurify integration sanitizing all user-generated fields (pledge text, quit clause, scripting notebook pages, journal reflections, teleprompter scripts, and goal titles) before writing to IndexedDB.
+  - Strips executable HTML/script vectors and validates data schema types to prevent stored XSS attacks.
+- **Storage Resilience & OPFS Boundaries (`src/lib/storage.ts`, `src/lib/opfs.ts`)**:
+  - All IndexedDB transactions and OPFS reads/writes are wrapped in resilient try/catch error boundaries.
+  - Graceful fallback to binary blob storage and in-memory stores if OPFS is restricted or quota is exhausted.
+  - Corrupted record quarantine and schema healing on read recovery.
+- **Content Security Policy & Permissions-Policy (`index.html`)**:
+  - Production CSP meta tag restricting unauthorized script sources, preventing inline unsafe evaluation where possible, and limiting external resource embedding strictly to trusted local media blobs and YouTube video links.
+  - Explicit `Permissions-Policy: camera=(self), microphone=(self), display-capture=(self)` allowing hardware hooks strictly as needed.
+- **Secure Client-Side ZIP Export**:
+  - In-memory JSZip packaging (`manifest-journal-export-YYYY-MM-DD.zip`) ensuring local JSON records and OPFS binary blobs are bundled without temporary unencrypted cache leaks.
+- **Media Stream Lifecycle Cleanup**:
+  - Strict `mediaStream.getTracks().forEach(track => track.stop())` lifecycle cleanup across selfie camera, album camera, and teleprompter recording upon modal exit or component unmount.
+- **Appearance Mode & Sacred Accent Alignment**:
+  - Pure Obsidian Black Appearance Mode (`dark:bg-black`, `#000000`) for app background, containers, cards, and navigation.
+  - All primary buttons, hero text, and icons dynamically adopt the chosen Sacred Accent Color.
+  - Storage monitor label explicitly updated to "Storage Used/Available".
+  - Onboarding "Who Are You" screen features two distinct explicit buttons: "Take a selfie" and "Upload profile picture".
+  - Teleprompter overlay pinned to the absolute top of the viewport adjacent to the front camera area with a buttery-smooth 0.5x reading pace.

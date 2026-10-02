@@ -81,7 +81,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ variant = 'c
 
         {showIOSGuide && (
           <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in">
-            <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-[#1d2024] p-6 shadow-2xl text-[#1b1b1c] dark:text-white">
+            <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-black border border-black/5 dark:border-white/15 p-6 shadow-2xl text-[#1b1b1c] dark:text-white">
               <div className="flex justify-between items-center mb-3">
                 <div className="flex items-center gap-3">
                   <img src="/icons/icon-72.png" alt="Manifest" className="w-10 h-10 rounded-2xl" />

@@ -9,6 +9,7 @@ import {
   Zap,
   Flame,
   CheckCircle,
+  Compass,
 } from 'lucide-react';
 
 interface VideoCard {
@@ -50,7 +51,11 @@ const YOUTUBE_VIDEOS: VideoCard[] = [
   },
 ];
 
-export const KnowledgeScreen: React.FC = () => {
+interface KnowledgeScreenProps {
+  onOpenGuide?: () => void;
+}
+
+export const KnowledgeScreen: React.FC<KnowledgeScreenProps> = ({ onOpenGuide }) => {
   const [expandedSection, setExpandedSection] = useState<number | null>(0);
 
   const sections = [
@@ -102,6 +107,31 @@ Rule 4: Relentless Micro-Action. Pair your spiritual alignment with daily discip
         </p>
       </div>
 
+      {/* Interactive Guide Banner */}
+      {onOpenGuide && (
+        <div className="bg-white dark:bg-black p-5 rounded-3xl border border-black/10 dark:border-white/15 shadow-xs flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-accent-container text-accent flex items-center justify-center shrink-0">
+              <Compass className="w-5 h-5 text-accent" />
+            </div>
+            <div>
+              <h3 className="font-bold text-sm text-[#1b1b1c] dark:text-white">
+                Interactive Journey Guide
+              </h3>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Step-by-step walkthrough of core philosophy & features.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onOpenGuide}
+            className="px-4 py-2 rounded-full bg-accent hover-bg-accent text-white text-xs font-bold shrink-0 shadow-xs transition active:scale-95"
+          >
+            Start Tour
+          </button>
+        </div>
+      )}
+
       {/* Accordion Guide Sections */}
       <div className="space-y-3">
         {sections.map((sec, idx) => {
@@ -110,7 +140,7 @@ Rule 4: Relentless Micro-Action. Pair your spiritual alignment with daily discip
           return (
             <div
               key={idx}
-              className="bg-white dark:bg-[#1d2024] rounded-3xl border border-black/5 dark:border-white/5 shadow-xs overflow-hidden transition-all"
+              className="bg-white dark:bg-black rounded-3xl border border-black/5 dark:border-white/15 shadow-xs overflow-hidden transition-all"
             >
               <button
                 onClick={() => setExpandedSection(isExpanded ? null : idx)}
@@ -132,7 +162,7 @@ Rule 4: Relentless Micro-Action. Pair your spiritual alignment with daily discip
               </button>
 
               {isExpanded && (
-                <div className="px-5 pb-5 pt-1 text-xs text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line border-t border-slate-100 dark:border-slate-800/80">
+                <div className="px-5 pb-5 pt-1 text-xs text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line border-t border-slate-100 dark:border-white/10">
                   {sec.content}
                 </div>
               )}
@@ -158,7 +188,7 @@ Rule 4: Relentless Micro-Action. Pair your spiritual alignment with daily discip
               href={vid.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white dark:bg-[#1d2024] p-4 rounded-3xl border border-black/5 dark:border-white/5 shadow-xs hover:border-accent-subtle transition group flex flex-col justify-between"
+              className="bg-white dark:bg-black p-4 rounded-3xl border border-black/5 dark:border-white/15 shadow-xs hover:border-accent-subtle transition group flex flex-col justify-between"
             >
               <div className="flex items-start justify-between gap-2">
                 <div>

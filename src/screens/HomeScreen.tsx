@@ -112,7 +112,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       {/* 2-Column Summary Cards: Today's Goal + Month's Goal */}
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Today's Goal */}
-        <div className="bg-white dark:bg-[#1d2024] p-5 rounded-3xl shadow-xs border border-black/5 dark:border-white/5 flex flex-col justify-between space-y-4">
+        <div className="bg-white dark:bg-black p-5 rounded-3xl shadow-xs border border-black/5 dark:border-white/15 flex flex-col justify-between space-y-4">
           <div>
             <div className="flex items-center justify-between text-xs font-bold text-accent uppercase tracking-wider mb-2">
               <span>DAILY</span>
@@ -154,7 +154,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
 
         {/* Month's Goal */}
-        <div className="bg-white dark:bg-[#1d2024] p-5 rounded-3xl shadow-xs border border-black/5 dark:border-white/5 flex flex-col justify-between space-y-4">
+        <div className="bg-white dark:bg-black p-5 rounded-3xl shadow-xs border border-black/5 dark:border-white/15 flex flex-col justify-between space-y-4">
           <div>
             <div className="flex items-center justify-between text-xs font-bold text-accent uppercase tracking-wider mb-2">
               <span>{monthName}</span>
@@ -213,7 +213,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         <div className="grid grid-cols-3 gap-3">
           <button
             onClick={() => onNavigate('scripting')}
-            className="flex flex-col items-center justify-center p-4 bg-white dark:bg-[#1d2024] rounded-3xl border border-black/5 dark:border-white/5 shadow-xs hover:border-accent-subtle transition group active:scale-95"
+            className="flex flex-col items-center justify-center p-4 bg-white dark:bg-black rounded-3xl border border-black/5 dark:border-white/15 shadow-xs hover:border-accent-subtle transition group active:scale-95"
           >
             <div className="w-13 h-13 rounded-full bg-accent-container text-accent flex items-center justify-center mb-2 group-hover:scale-105 transition">
               <PenTool className="w-6 h-6 stroke-[2]" />
@@ -225,7 +225,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
           <button
             onClick={() => onNavigate('journal', { openNew: true })}
-            className="flex flex-col items-center justify-center p-4 bg-white dark:bg-[#1d2024] rounded-3xl border border-black/5 dark:border-white/5 shadow-xs hover:border-accent-subtle transition group active:scale-95"
+            className="flex flex-col items-center justify-center p-4 bg-white dark:bg-black rounded-3xl border border-black/5 dark:border-white/15 shadow-xs hover:border-accent-subtle transition group active:scale-95"
           >
             <div className="w-13 h-13 rounded-full bg-accent-container text-accent flex items-center justify-center mb-2 group-hover:scale-105 transition">
               <BookOpen className="w-6 h-6 stroke-[2]" />
@@ -237,7 +237,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
           <button
             onClick={() => onNavigate('album', { openCamera: true })}
-            className="flex flex-col items-center justify-center p-4 bg-white dark:bg-[#1d2024] rounded-3xl border border-black/5 dark:border-white/5 shadow-xs hover:border-accent-subtle transition group active:scale-95"
+            className="flex flex-col items-center justify-center p-4 bg-white dark:bg-black rounded-3xl border border-black/5 dark:border-white/15 shadow-xs hover:border-accent-subtle transition group active:scale-95"
           >
             <div className="w-13 h-13 rounded-full bg-accent-container text-accent flex items-center justify-center mb-2 group-hover:scale-105 transition">
               <Camera className="w-6 h-6 stroke-[2]" />
@@ -255,7 +255,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       {/* Goal Completion Evaluation Dialog */}
       {showGoalModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in">
-          <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-[#1d2024] p-6 shadow-2xl text-center space-y-4">
+          <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-black border border-black/5 dark:border-white/15 p-6 shadow-2xl text-center space-y-4">
             <div className="w-14 h-14 mx-auto rounded-full bg-accent-container text-accent flex items-center justify-center">
               <Sparkles className="w-7 h-7 text-accent" />
             </div>

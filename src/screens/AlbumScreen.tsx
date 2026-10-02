@@ -222,7 +222,7 @@ export const AlbumScreen: React.FC<AlbumScreenProps> = ({
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700">
+      <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-black rounded-full border border-slate-200 dark:border-white/15">
         {(['all', 'photo', 'video', 'recording'] as const).map((cat) => (
           <button
             key={cat}
@@ -240,7 +240,7 @@ export const AlbumScreen: React.FC<AlbumScreenProps> = ({
 
       {/* 3-Column Media Grid */}
       {filteredMedia.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-[#1d2024] rounded-3xl border border-dashed border-slate-200 dark:border-slate-700 p-6 space-y-3">
+        <div className="text-center py-16 bg-white dark:bg-black rounded-3xl border border-dashed border-slate-200 dark:border-white/15 p-6 space-y-3">
           <div className="w-12 h-12 mx-auto rounded-full bg-accent-container flex items-center justify-center text-accent">
             <Camera className="w-6 h-6" />
           </div>

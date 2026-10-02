@@ -15,6 +15,7 @@ import { applyTheme, applyAccentColor } from './lib/theme';
 import { TopBar, BottomNav } from './components/Navigation';
 import { Drawer } from './components/Drawer';
 import { OfflineIndicator } from './components/OfflineIndicator';
+import { InteractiveUserGuide } from './components/InteractiveUserGuide';
 
 import { CommitmentScreen } from './screens/CommitmentScreen';
 import { HomeScreen } from './screens/HomeScreen';
@@ -30,10 +31,10 @@ export default function App() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [goals, setGoals] = useState<Goal[]>([]);
   const [streakCount, setStreakCount] = useState(0);
-  const [settings, setSettings] = useState<AppSettings>({ theme: 'system', accentColor: '#0b57d0' });
+  const [settings, setSettings] = useState<AppSettings>({ theme: 'dark', accentColor: '#0b57d0' });
   const [storageInfo, setStorageInfo] = useState<StorageEstimateInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
 
   // Navigation State
   const [currentRoute, setCurrentRoute] = useState<string>(() => {
@@ -43,6 +44,7 @@ export default function App() {
   });
   const [routeState, setRouteState] = useState<any>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
 
   // Quick theme toggle handler (light <-> dark)
   const handleQuickThemeToggle = useCallback(async () => {
@@ -185,7 +187,7 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#fcf9f8] dark:bg-[#111318] p-6 text-center">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#fcf9f8] dark:bg-black p-6 text-center">
         <div className="w-16 h-16 rounded-3xl bg-accent text-white flex items-center justify-center shadow-xl animate-pulse mb-4">
           <img src="/icons/icon-96.png" alt="Manifest" className="w-12 h-12" />
         </div>
@@ -199,7 +201,7 @@ export default function App() {
   // Show Commitment onboarding if user hasn't committed yet
   if (!isCommitted && currentRoute !== 'knowledge') {
     return (
-      <div className="min-h-screen bg-[#fcf9f8] dark:bg-[#111318] ambient-gradient">
+      <div className="min-h-screen bg-[#fcf9f8] dark:bg-black ambient-gradient">
         <CommitmentScreen
           existingProfile={null}
           onComplete={async (newProfile) => {
@@ -217,7 +219,7 @@ export default function App() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcf9f8] dark:bg-[#111318] ambient-gradient text-[#1b1b1c] dark:text-[#e2e2e9] transition-colors">
+    <div className="min-h-screen flex flex-col bg-[#fcf9f8] dark:bg-black ambient-gradient text-[#1b1b1c] dark:text-white transition-colors">
       <OfflineIndicator />
 
       {/* Top Application Bar */}
@@ -240,6 +242,7 @@ export default function App() {
         profile={profile}
         storageInfo={storageInfo}
         streakCount={streakCount}
+        onOpenGuide={() => setIsGuideOpen(true)}
       />
 
       {/* Main Content Viewport */}
@@ -285,7 +288,7 @@ export default function App() {
         )}
 
         {currentRoute === 'knowledge' && (
-          <KnowledgeScreen />
+          <KnowledgeScreen onOpenGuide={() => setIsGuideOpen(true)} />
         )}
 
         {currentRoute === 'settings' && (
@@ -312,6 +315,13 @@ export default function App() {
           onTabChange={(tab) => navigateTo(tab)}
         />
       )}
+
+      {/* Interactive Step-by-Step User Guide Modal */}
+      <InteractiveUserGuide
+        isOpen={isGuideOpen}
+        onClose={() => setIsGuideOpen(false)}
+        onNavigate={(route) => navigateTo(route)}
+      />
     </div>
   );
 }

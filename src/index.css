@@ -46,39 +46,41 @@
 
   [data-theme="dark"], .dark {
     color-scheme: dark;
-    --md-sys-color-on-primary: #062e6f;
+    --md-sys-color-on-primary: #000000;
     --md-sys-color-primary-container: var(--accent-container-dark);
-    --md-sys-color-on-primary-container: #d3e3fd;
+    --md-sys-color-on-primary-container: #ffffff;
     
-    --md-sys-color-surface: #111318;
-    --md-sys-color-surface-dim: #111318;
-    --md-sys-color-surface-bright: #37393e;
-    --md-sys-color-surface-container-lowest: #0c0e13;
-    --md-sys-color-surface-container-low: #191c20;
-    --md-sys-color-surface-container: #1d2024;
-    --md-sys-color-surface-container-high: #282a2f;
-    --md-sys-color-surface-container-highest: #33353a;
+    --md-sys-color-surface: #000000;
+    --md-sys-color-surface-dim: #000000;
+    --md-sys-color-surface-bright: #121214;
+    --md-sys-color-surface-container-lowest: #000000;
+    --md-sys-color-surface-container-low: #000000;
+    --md-sys-color-surface-container: #000000;
+    --md-sys-color-surface-container-high: #0a0a0c;
+    --md-sys-color-surface-container-highest: #141418;
     
-    --md-sys-color-on-surface: #e2e2e9;
-    --md-sys-color-on-surface-variant: #c4c6d0;
+    --md-sys-color-on-surface: #ffffff;
+    --md-sys-color-on-surface-variant: #e2e2e9;
     --md-sys-color-outline: #8e9099;
-    --md-sys-color-outline-variant: #44474f;
+    --md-sys-color-outline-variant: #28282e;
     
     --md-sys-color-secondary: #bec6dc;
-    --md-sys-color-secondary-container: #3b4858;
-    --md-sys-color-on-secondary-container: #d7e3f8;
+    --md-sys-color-secondary-container: #1e1e24;
+    --md-sys-color-on-secondary-container: #ffffff;
     
     --md-sys-color-tertiary: #dfb8de;
-    --md-sys-color-tertiary-container: #553f58;
+    --md-sys-color-tertiary-container: #2c202e;
   }
 
   html, body {
-    transition: background-color 0.25s ease, color 0.25s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
 /* Sacred Accent Color Utilities */
-.text-accent {
+.text-accent,
+.icon-accent,
+svg.accent-icon {
   color: var(--accent-color, #0b57d0) !important;
 }
 
@@ -153,10 +155,10 @@
 
 .dark .notebook-ruled-paper,
 [data-theme="dark"] .notebook-ruled-paper {
-  background-color: #101217 !important;
+  background-color: #000000 !important;
   background-image: 
-    linear-gradient(90deg, transparent 79px, rgba(239, 68, 68, 0.55) 79px, rgba(239, 68, 68, 0.55) 81px, transparent 81px),
-    linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px) !important;
+    linear-gradient(90deg, transparent 79px, rgba(239, 68, 68, 0.6) 79px, rgba(239, 68, 68, 0.6) 81px, transparent 81px),
+    linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px) !important;
   background-size: 100% 100%, 100% 32px;
   line-height: 32px;
 }
@@ -171,8 +173,8 @@
 
 .dark .notebook-ruled-paper textarea::placeholder,
 [data-theme="dark"] .notebook-ruled-paper textarea::placeholder {
-  color: rgba(255, 255, 255, 0.45) !important;
-  -webkit-text-fill-color: rgba(255, 255, 255, 0.45) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.5) !important;
 }
 
 .notebook-ruled-paper textarea::selection {
@@ -180,7 +182,7 @@
   color: #ffffff !important;
 }
 
-/* Dynamic Sacred Gradients that turn completely dark in dark mode */
+/* Dynamic Sacred Gradients that turn completely dark/black in dark mode */
 .hero-gradient {
   background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.08) 0%, #ffffff 50%, rgba(var(--accent-rgb), 0.16) 100%);
   border-color: rgba(var(--accent-rgb), 0.18);
@@ -188,8 +190,8 @@
 
 .dark .hero-gradient,
 [data-theme="dark"] .hero-gradient {
-  background: linear-gradient(135deg, #181b22 0%, #121418 50%, rgba(var(--accent-rgb), 0.22) 100%) !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  background: linear-gradient(135deg, #000000 0%, #060609 50%, rgba(var(--accent-rgb), 0.28) 100%) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
 }
 
 .streak-gradient {
@@ -198,7 +200,7 @@
 
 .dark .streak-gradient,
 [data-theme="dark"] .streak-gradient {
-  background: linear-gradient(90deg, #1d2027 0%, rgba(var(--accent-rgb), 0.25) 100%) !important;
+  background: linear-gradient(90deg, #000000 0%, rgba(var(--accent-rgb), 0.3) 100%) !important;
 }
 
 .card-gradient {
@@ -207,8 +209,8 @@
 
 .dark .card-gradient,
 [data-theme="dark"] .card-gradient {
-  background: linear-gradient(135deg, #181b22 0%, #121418 100%) !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: linear-gradient(135deg, #000000 0%, #06060a 100%) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
 }
 
 .pwa-banner-gradient {
@@ -217,8 +219,8 @@
 
 .dark .pwa-banner-gradient,
 [data-theme="dark"] .pwa-banner-gradient {
-  background: linear-gradient(135deg, #1d2027 0%, #121418 55%, rgba(var(--accent-rgb), 0.3) 100%) !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: linear-gradient(135deg, #000000 0%, #060608 55%, rgba(var(--accent-rgb), 0.35) 100%) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
 }
 
 .ambient-gradient {
@@ -227,7 +229,7 @@
 
 .dark .ambient-gradient,
 [data-theme="dark"] .ambient-gradient {
-  background-image: radial-gradient(ellipse 90% 50% at 50% -10%, rgba(var(--accent-rgb), 0.2), transparent 70%) !important;
+  background-image: radial-gradient(ellipse 90% 50% at 50% -10%, rgba(var(--accent-rgb), 0.22), transparent 70%) !important;
 }
 
 .hero-text {

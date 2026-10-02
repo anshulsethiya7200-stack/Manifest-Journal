@@ -98,14 +98,18 @@ export function applyTheme(theme: 'light' | 'dark' | 'system'): boolean {
   if (isDark) {
     root.setAttribute('data-theme', 'dark');
     root.classList.add('dark');
+    root.style.backgroundColor = '#000000';
+    root.style.color = '#ffffff';
     if (body) {
       body.classList.add('dark');
-      body.style.backgroundColor = '#111318';
-      body.style.color = '#e2e2e9';
+      body.style.backgroundColor = '#000000';
+      body.style.color = '#ffffff';
     }
   } else {
     root.removeAttribute('data-theme');
     root.classList.remove('dark');
+    root.style.backgroundColor = '#fcf9f8';
+    root.style.color = '#1b1b1c';
     if (body) {
       body.classList.remove('dark');
       body.style.backgroundColor = '#fcf9f8';
@@ -116,7 +120,7 @@ export function applyTheme(theme: 'light' | 'dark' | 'system'): boolean {
   // Update theme-color meta tag for mobile address bar
   const metaTheme = document.querySelector('meta[name="theme-color"]');
   if (metaTheme) {
-    metaTheme.setAttribute('content', isDark ? '#111318' : '#fcf9f8');
+    metaTheme.setAttribute('content', isDark ? '#000000' : '#fcf9f8');
   }
 
   return isDark;
@@ -134,11 +138,16 @@ export function applyAccentColor(accentColorHex: string) {
 
   root.style.setProperty('--accent-color', hex);
   root.style.setProperty('--accent-rgb', `${r}, ${g}, ${b}`);
-  root.style.setProperty('--accent-container', `rgba(${r}, ${g}, ${b}, 0.14)`);
-  root.style.setProperty('--accent-container-dark', `rgba(${r}, ${g}, ${b}, 0.28)`);
+  root.style.setProperty('--accent-container', `rgba(${r}, ${g}, ${b}, 0.16)`);
+  root.style.setProperty('--accent-container-dark', `rgba(${r}, ${g}, ${b}, 0.3)`);
   root.style.setProperty('--accent-light', `rgba(${r}, ${g}, ${b}, 0.08)`);
   root.style.setProperty('--accent-hover', `rgba(${r}, ${g}, ${b}, 0.88)`);
   root.style.setProperty('--accent-border', `rgba(${r}, ${g}, ${b}, 0.35)`);
-  root.style.setProperty('--accent-ring', `rgba(${r}, ${g}, ${b}, 0.45)`);
+  root.style.setProperty('--accent-ring', `rgba(${r}, ${g}, ${b}, 0.5)`);
   root.style.setProperty('--md-sys-color-primary', hex);
+
+  if (document.body) {
+    document.body.style.setProperty('--accent-color', hex);
+    document.body.style.setProperty('--accent-rgb', `${r}, ${g}, ${b}`);
+  }
 }
