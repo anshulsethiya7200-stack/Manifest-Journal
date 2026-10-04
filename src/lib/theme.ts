@@ -144,7 +144,7 @@ export function applyAccentColor(accentColorHex: string) {
   const G = sG <= 0.03928 ? sG / 12.92 : Math.pow((sG + 0.055) / 1.055, 2.4);
   const B = sB <= 0.03928 ? sB / 12.92 : Math.pow((sB + 0.055) / 1.055, 2.4);
   const lum = 0.2126 * R + 0.7152 * G + 0.0722 * B;
-  const onAccent = lum > 0.38 ? '#000000' : '#ffffff';
+  const onAccent = lum > 0.179 ? '#000000' : '#ffffff';
 
   root.style.setProperty('--accent-color', hex);
   root.style.setProperty('--on-accent', onAccent);

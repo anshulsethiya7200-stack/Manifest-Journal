@@ -176,7 +176,7 @@ export const DailyAffirmationCard: React.FC<DailyAffirmationCardProps> = ({ onNa
       <div className="flex items-center gap-2 pt-2 border-t border-black/5 dark:border-white/5 relative z-10">
         <button
           onClick={handleScriptAffirmation}
-          className="flex-1 py-2.5 px-3 rounded-full bg-accent text-white hover-bg-accent text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition active:scale-95"
+          className="flex-1 py-2.5 px-3 rounded-full bg-accent text-on-accent hover-bg-accent text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition active:scale-95"
         >
           <PenTool className="w-3.5 h-3.5" />
           <span>Script This</span>

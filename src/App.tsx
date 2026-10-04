@@ -15,17 +15,36 @@ import { applyTheme, applyAccentColor } from './lib/theme';
 import { TopBar, BottomNav } from './components/Navigation';
 import { Drawer } from './components/Drawer';
 import { OfflineIndicator } from './components/OfflineIndicator';
-import { InteractiveUserGuide } from './components/InteractiveUserGuide';
 
-import { CommitmentScreen } from './screens/CommitmentScreen';
 import { HomeScreen } from './screens/HomeScreen';
-import { GoalsScreen } from './screens/GoalsScreen';
-import { ScriptingScreen } from './screens/ScriptingScreen';
-import { JournalScreen } from './screens/JournalScreen';
-import { AlbumScreen } from './screens/AlbumScreen';
-import { TeleprompterScreen } from './screens/TeleprompterScreen';
-import { KnowledgeScreen } from './screens/KnowledgeScreen';
-import { SettingsScreen } from './screens/SettingsScreen';
+
+const GoalsScreen = React.lazy(() =>
+  import('./screens/GoalsScreen').then((m) => ({ default: m.GoalsScreen }))
+);
+const ScriptingScreen = React.lazy(() =>
+  import('./screens/ScriptingScreen').then((m) => ({ default: m.ScriptingScreen }))
+);
+const JournalScreen = React.lazy(() =>
+  import('./screens/JournalScreen').then((m) => ({ default: m.JournalScreen }))
+);
+const AlbumScreen = React.lazy(() =>
+  import('./screens/AlbumScreen').then((m) => ({ default: m.AlbumScreen }))
+);
+const TeleprompterScreen = React.lazy(() =>
+  import('./screens/TeleprompterScreen').then((m) => ({ default: m.TeleprompterScreen }))
+);
+const KnowledgeScreen = React.lazy(() =>
+  import('./screens/KnowledgeScreen').then((m) => ({ default: m.KnowledgeScreen }))
+);
+const SettingsScreen = React.lazy(() =>
+  import('./screens/SettingsScreen').then((m) => ({ default: m.SettingsScreen }))
+);
+const CommitmentScreen = React.lazy(() =>
+  import('./screens/CommitmentScreen').then((m) => ({ default: m.CommitmentScreen }))
+);
+const InteractiveUserGuide = React.lazy(() =>
+  import('./components/InteractiveUserGuide').then((m) => ({ default: m.InteractiveUserGuide }))
+);
 
 export default function App() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -189,7 +208,7 @@ export default function App() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#fcf9f8] dark:bg-black p-6 text-center">
         <div className="w-16 h-16 rounded-3xl bg-accent text-white flex items-center justify-center shadow-xl animate-pulse mb-4">
-          <img src="/icons/icon-96.png" alt="Manifest" className="w-12 h-12" />
+          <img src="/icons/icon-96.png" alt="Manifest" width="48" height="48" className="w-12 h-12" />
         </div>
         <p className="text-sm font-semibold hero-text">
           Opening Your Sacred Space...
@@ -202,14 +221,22 @@ export default function App() {
   if (!isCommitted && currentRoute !== 'knowledge') {
     return (
       <div className="min-h-screen bg-[#fcf9f8] dark:bg-black ambient-gradient">
-        <CommitmentScreen
-          existingProfile={null}
-          onComplete={async (newProfile) => {
-            setProfile(newProfile);
-            await refreshData();
-            navigateTo('home');
-          }}
-        />
+        <React.Suspense
+          fallback={
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+            </div>
+          }
+        >
+          <CommitmentScreen
+            existingProfile={null}
+            onComplete={async (newProfile) => {
+              setProfile(newProfile);
+              await refreshData();
+              navigateTo('home');
+            }}
+          />
+        </React.Suspense>
       </div>
     );
   }
@@ -258,54 +285,62 @@ export default function App() {
           />
         )}
 
-        {currentRoute === 'scripting' && (
-          <ScriptingScreen initialState={routeState} onRefreshData={refreshData} />
-        )}
+        <React.Suspense
+          fallback={
+            <div className="flex items-center justify-center py-20">
+              <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+            </div>
+          }
+        >
+          {currentRoute === 'scripting' && (
+            <ScriptingScreen initialState={routeState} onRefreshData={refreshData} />
+          )}
 
-        {currentRoute === 'journal' && (
-          <JournalScreen
-            initialState={routeState}
-            onRefreshData={refreshData}
-          />
-        )}
+          {currentRoute === 'journal' && (
+            <JournalScreen
+              initialState={routeState}
+              onRefreshData={refreshData}
+            />
+          )}
 
-        {currentRoute === 'album' && (
-          <AlbumScreen
-            initialOpenCamera={routeState?.openCamera || false}
-            onRefreshData={refreshData}
-          />
-        )}
+          {currentRoute === 'album' && (
+            <AlbumScreen
+              initialOpenCamera={routeState?.openCamera || false}
+              onRefreshData={refreshData}
+            />
+          )}
 
-        {currentRoute === 'teleprompter' && (
-          <TeleprompterScreen
-            onRecordingSaved={refreshData}
-            onNavigateToAlbum={() => navigateTo('album')}
-          />
-        )}
+          {currentRoute === 'teleprompter' && (
+            <TeleprompterScreen
+              onRecordingSaved={refreshData}
+              onNavigateToAlbum={() => navigateTo('album')}
+            />
+          )}
 
-        {currentRoute === 'goals' && (
-          <GoalsScreen onRefreshData={refreshData} />
-        )}
+          {currentRoute === 'goals' && (
+            <GoalsScreen onRefreshData={refreshData} />
+          )}
 
-        {currentRoute === 'knowledge' && (
-          <KnowledgeScreen onOpenGuide={() => setIsGuideOpen(true)} />
-        )}
+          {currentRoute === 'knowledge' && (
+            <KnowledgeScreen onOpenGuide={() => setIsGuideOpen(true)} />
+          )}
 
-        {currentRoute === 'settings' && (
-          <SettingsScreen
-            profile={profile}
-            onOpenCovenant={() => navigateTo('commitment')}
-            onSettingsChanged={(newSett) => setSettings(newSett)}
-          />
-        )}
+          {currentRoute === 'settings' && (
+            <SettingsScreen
+              profile={profile}
+              onOpenCovenant={() => navigateTo('commitment')}
+              onSettingsChanged={(newSett) => setSettings(newSett)}
+            />
+          )}
 
-        {currentRoute === 'commitment' && (
-          <CommitmentScreen
-            existingProfile={profile}
-            isReadOnly={true}
-            onComplete={() => navigateTo('settings')}
-          />
-        )}
+          {currentRoute === 'commitment' && (
+            <CommitmentScreen
+              existingProfile={profile}
+              isReadOnly={true}
+              onComplete={() => navigateTo('settings')}
+            />
+          )}
+        </React.Suspense>
       </main>
 
       {/* Fixed Bottom Navigation Tabs */}
@@ -317,11 +352,15 @@ export default function App() {
       )}
 
       {/* Interactive Step-by-Step User Guide Modal */}
-      <InteractiveUserGuide
-        isOpen={isGuideOpen}
-        onClose={() => setIsGuideOpen(false)}
-        onNavigate={(route) => navigateTo(route)}
-      />
+      {isGuideOpen && (
+        <React.Suspense fallback={null}>
+          <InteractiveUserGuide
+            isOpen={isGuideOpen}
+            onClose={() => setIsGuideOpen(false)}
+            onNavigate={(route) => navigateTo(route)}
+          />
+        </React.Suspense>
+      )}
     </div>
   );
 }

@@ -137,7 +137,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             ) : todayGoal ? (
               <button
                 onClick={() => handleMarkGoalDone(todayGoal)}
-                className="w-full py-2.5 rounded-full bg-accent text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs hover-bg-accent transition active:scale-95"
+                className="w-full py-2.5 rounded-full bg-accent text-on-accent font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs hover-bg-accent transition active:scale-95"
               >
                 <Check className="w-4 h-4 stroke-[2.5]" />
                 <span>Mark Done</span>
@@ -145,7 +145,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             ) : (
               <button
                 onClick={() => onNavigate('goals')}
-                className="w-full py-2.5 rounded-full bg-accent text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs hover-bg-accent transition active:scale-95"
+                className="w-full py-2.5 rounded-full bg-accent text-on-accent font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs hover-bg-accent transition active:scale-95"
               >
                 <span>Set Today's Goal</span>
               </button>
@@ -196,7 +196,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             ) : (
               <button
                 onClick={() => onNavigate('goals')}
-                className="w-full py-2.5 rounded-full bg-accent text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs hover-bg-accent transition active:scale-95"
+                className="w-full py-2.5 rounded-full bg-accent text-on-accent font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs hover-bg-accent transition active:scale-95"
               >
                 <span>Set Month's Goal</span>
               </button>

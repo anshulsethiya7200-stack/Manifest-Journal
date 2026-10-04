@@ -572,7 +572,11 @@ export async function setSetting(key: string, value: any): Promise<void> {
 
 export async function getAppSettings(): Promise<AppSettings> {
   const theme = await getSetting<AppSettings['theme']>('theme', 'dark');
-  const accentColor = await getSetting<string>('accentColor', '#0b57d0');
+  let accentColor = await getSetting<string>('accentColor', '#0b57d0');
+  if (accentColor && accentColor.toLowerCase() === '#ea580c') {
+    accentColor = '#c2410c';
+    await setSetting('accentColor', '#c2410c');
+  }
   return { theme, accentColor };
 }
 
