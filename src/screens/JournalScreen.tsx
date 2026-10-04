@@ -284,7 +284,7 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
             <h2 className="text-2xl sm:text-3xl font-extrabold hero-text">
               {formattedHeaderDate}
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
+            <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 font-medium">
               {todayEntries.length} Anchored Moments Recorded
             </p>
           </div>
@@ -299,7 +299,7 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
                 <h3 className="font-bold text-sm text-[#1b1b1c] dark:text-white">
                   No anchored moments yet today
                 </h3>
-                <p className="text-xs text-slate-400 max-w-xs mx-auto">
+                <p className="text-xs text-slate-600 dark:text-slate-300 max-w-xs mx-auto">
                   Capture intentional thoughts, gratitude, synchronicities, or photos as they unfold.
                 </p>
                 <button
@@ -349,7 +349,7 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
                             isVid ? (
                               <video src={url} className="w-full h-full object-cover" muted />
                             ) : (
-                              <img src={url} alt="Attached" className="w-full h-full object-cover" />
+                              <img src={url} alt={`Journal attachment ${idx + 1}`} className="w-full h-full object-cover" />
                             )
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">
@@ -368,6 +368,7 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
                       }}
                       className="w-14 h-14 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-accent hover:border-accent transition active:scale-95"
                       title="Edit or add media"
+                      aria-label="Edit or add media to moment"
                     >
                       <Plus className="w-5 h-5" />
                     </button>

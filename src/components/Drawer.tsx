@@ -206,7 +206,7 @@ export const Drawer: React.FC<DrawerProps> = ({
 
         {/* Footer info: storage */}
         <div className="p-4 border-t border-black/5 dark:border-white/15 bg-slate-50/50 dark:bg-black text-xs">
-          <div className="flex items-center justify-between text-slate-500 mb-1.5">
+          <div className="flex items-center justify-between text-slate-600 dark:text-slate-300 mb-1.5">
             <span className="flex items-center gap-1.5 font-medium">
               <HardDrive className="w-3.5 h-3.5 text-accent" />
               Storage Used/Available
@@ -227,7 +227,7 @@ export const Drawer: React.FC<DrawerProps> = ({
               />
             </div>
           )}
-          <p className="text-[10px] text-slate-400 mt-2">
+          <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-2">
             Local-First & Sandbox Encrypted. No Cloud Sync.
           </p>
         </div>

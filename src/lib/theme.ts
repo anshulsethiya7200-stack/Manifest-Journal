@@ -23,31 +23,31 @@ export const SACRED_ACCENT_COLORS: SacredAccent[] = [
   {
     name: 'Abundance Emerald',
     chakra: 'Heart Chakra',
-    hex: '#059669',
+    hex: '#047857',
     description: 'Prosperity, limitless wealth, flourishing health',
   },
   {
     name: 'Solar Amber',
     chakra: 'Solar Plexus',
-    hex: '#d97706',
+    hex: '#b45309',
     description: 'Willpower, vibrant manifestation, sovereignty',
   },
   {
     name: 'Sacred Rose',
     chakra: 'Divine Heart',
-    hex: '#e11d48',
+    hex: '#be123c',
     description: 'Gratitude, self-love, compassionate resonance',
   },
   {
     name: 'Deep Ocean',
     chakra: 'Throat Chakra',
-    hex: '#0284c7',
+    hex: '#0369a1',
     description: 'Truth, calm certainty, peaceful presence',
   },
   {
     name: 'Quantum Fire',
     chakra: 'Sacral Chakra',
-    hex: '#ea580c',
+    hex: '#c2410c',
     description: 'Creative fire, dynamic breakthrough, magnetism',
   },
   {
@@ -136,7 +136,18 @@ export function applyAccentColor(accentColorHex: string) {
   const { r, g, b } = hexToRgb(hex);
   const root = document.documentElement;
 
+  // Calculate relative luminance to guarantee WCAG AA contrast ratio >= 4.5:1
+  const sR = r / 255;
+  const sG = g / 255;
+  const sB = b / 255;
+  const R = sR <= 0.03928 ? sR / 12.92 : Math.pow((sR + 0.055) / 1.055, 2.4);
+  const G = sG <= 0.03928 ? sG / 12.92 : Math.pow((sG + 0.055) / 1.055, 2.4);
+  const B = sB <= 0.03928 ? sB / 12.92 : Math.pow((sB + 0.055) / 1.055, 2.4);
+  const lum = 0.2126 * R + 0.7152 * G + 0.0722 * B;
+  const onAccent = lum > 0.38 ? '#000000' : '#ffffff';
+
   root.style.setProperty('--accent-color', hex);
+  root.style.setProperty('--on-accent', onAccent);
   root.style.setProperty('--accent-rgb', `${r}, ${g}, ${b}`);
   root.style.setProperty('--accent-container', `rgba(${r}, ${g}, ${b}, 0.16)`);
   root.style.setProperty('--accent-container-dark', `rgba(${r}, ${g}, ${b}, 0.3)`);
@@ -148,6 +159,7 @@ export function applyAccentColor(accentColorHex: string) {
 
   if (document.body) {
     document.body.style.setProperty('--accent-color', hex);
+    document.body.style.setProperty('--on-accent', onAccent);
     document.body.style.setProperty('--accent-rgb', `${r}, ${g}, ${b}`);
   }
 }

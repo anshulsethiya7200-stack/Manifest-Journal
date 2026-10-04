@@ -245,7 +245,7 @@ export const AlbumScreen: React.FC<AlbumScreenProps> = ({
             <Camera className="w-6 h-6" />
           </div>
           <h3 className="font-bold text-sm text-[#1b1b1c] dark:text-white">No media captured yet</h3>
-          <p className="text-xs text-slate-400 max-w-xs mx-auto">
+          <p className="text-xs text-slate-600 dark:text-slate-300 max-w-xs mx-auto">
             Take manifestation photos, video affirmations, or teleprompter recordings.
           </p>
           <button
@@ -270,7 +270,11 @@ export const AlbumScreen: React.FC<AlbumScreenProps> = ({
                   isVid ? (
                     <video src={url} className="w-full h-full object-cover" />
                   ) : (
-                    <img src={url} alt="Album" className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+                    <img
+                      src={url}
+                      alt={`Captured ${item.type} ${new Date(item.takenAt).toLocaleDateString()}`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                    />
                   )
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-xs text-slate-400">

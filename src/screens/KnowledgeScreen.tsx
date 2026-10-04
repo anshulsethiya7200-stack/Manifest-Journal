@@ -22,32 +22,32 @@ interface VideoCard {
 
 const YOUTUBE_VIDEOS: VideoCard[] = [
   {
-    title: 'The Science of Manifestation: Reticular Activating System',
-    channelName: 'Dr. Andrew Huberman & Neurobiology',
-    url: 'https://www.youtube.com/watch?v=0hN1wM0M0eQ',
-    thumbnailId: 'huberman-ras',
-    duration: '18 min',
+    title: 'Sadhguru — How to Manifest What You Really Want',
+    channelName: 'Sadhguru',
+    url: 'https://youtu.be/UwGSgJytufY?si=4-SrGXvKolk_NSA8',
+    thumbnailId: 'sadhguru-manifest',
+    duration: '16 min',
   },
   {
-    title: 'The Secret Power of the 3-6-9 Code by Nikola Tesla',
-    channelName: 'Conscious Elevation',
-    url: 'https://www.youtube.com/watch?v=kYJ40-QnE_0',
-    thumbnailId: 'tesla-369',
+    title: "The Shikshit Talks — 369 Manifestation Technique (Tesla's Secret)",
+    channelName: 'The Shikshit Talks',
+    url: 'https://youtu.be/PA3jBllt7RQ?si=ntmAmvsIGexlfh9n',
+    thumbnailId: 'the-shikshit-talks-369',
     duration: '14 min',
   },
   {
-    title: 'Living in the End: Neville Goddard Assumption Technique',
-    channelName: 'Master Sri Akarshana',
-    url: 'https://www.youtube.com/watch?v=Nq32d0_M914',
-    thumbnailId: 'neville-goddard',
-    duration: '22 min',
+    title: 'Thinkspy — The Secret of Manifestation Explained (Law of Attraction)',
+    channelName: 'Thinkspy',
+    url: 'https://youtu.be/zvKlXfWQ2b8?si=X_wMXCK1pCisJT-Q',
+    thumbnailId: 'thinkspy-manifest',
+    duration: '24 min',
   },
   {
-    title: 'Rewiring the Subconscious Mind for Wealth & Self-Worth',
-    channelName: 'Dr. Joe Dispenza Insights',
-    url: 'https://www.youtube.com/watch?v=2Z20bX5vF6g',
-    thumbnailId: 'dispenza-subconscious',
-    duration: '26 min',
+    title: 'Cyber Zeel — Manifestation Technique in Hanuman Chalisa',
+    channelName: 'Cyber Zeel',
+    url: 'https://youtu.be/SQYHgnLKnLg?si=5lC8W453Ls4WXs6N',
+    thumbnailId: 'cyber-zeel-hanuman-chalisa',
+    duration: '18 min',
   },
 ];
 
@@ -102,7 +102,7 @@ Rule 4: Relentless Micro-Action. Pair your spiritual alignment with daily discip
         <h2 className="text-2xl font-extrabold hero-text">
           Know to Manifest
         </h2>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+        <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
           The scientific laws, ancient principles, and disciplined mechanics of conscious reality creation.
         </p>
       </div>
@@ -118,7 +118,7 @@ Rule 4: Relentless Micro-Action. Pair your spiritual alignment with daily discip
               <h3 className="font-bold text-sm text-[#1b1b1c] dark:text-white">
                 Interactive Journey Guide
               </h3>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              <p className="text-[11px] text-slate-600 dark:text-slate-300">
                 Step-by-step walkthrough of core philosophy & features.
               </p>
             </div>
@@ -178,7 +178,7 @@ Rule 4: Relentless Micro-Action. Pair your spiritual alignment with daily discip
             <BookOpen className="w-4 h-4 text-accent" />
             <span>Curated Teachings</span>
           </h3>
-          <span className="text-[11px] text-slate-400">External Links</span>
+          <span className="text-[11px] text-slate-600 dark:text-slate-300">External Links</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -195,14 +195,14 @@ Rule 4: Relentless Micro-Action. Pair your spiritual alignment with daily discip
                   <h4 className="font-bold text-xs text-[#1b1b1c] dark:text-white group-hover:text-accent transition line-clamp-2">
                     {vid.title}
                   </h4>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1">
                     {vid.channelName}
                   </p>
                 </div>
                 <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-accent shrink-0" />
               </div>
 
-              <div className="mt-3 flex items-center justify-between text-[10px] text-slate-400">
+              <div className="mt-3 flex items-center justify-between text-[10px] text-slate-600 dark:text-slate-300">
                 <span className="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-medium">
                   {vid.duration}
                 </span>

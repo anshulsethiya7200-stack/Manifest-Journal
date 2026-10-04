@@ -168,7 +168,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <h3 className="font-bold text-sm text-[#1b1b1c] dark:text-white">
               Signed Covenant
             </h3>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-slate-600 dark:text-slate-300">
               {profile ? `Committed on ${new Date(profile.committedAt).toLocaleDateString()}` : 'Not sealed yet'}
             </p>
           </div>
@@ -176,7 +176,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
 
         <button
           onClick={onOpenCovenant}
-          className="px-4 py-2 rounded-full bg-accent-container text-accent text-xs font-bold hover:opacity-90 transition active:scale-95"
+          className="px-4 py-2 rounded-full border border-slate-300 dark:border-white/20 bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-white text-xs font-bold hover:bg-slate-200 dark:hover:bg-zinc-700 transition active:scale-95"
         >
           View Vow
         </button>
@@ -189,7 +189,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <Sun className="w-4 h-4 text-accent" />
             <span>Appearance Mode</span>
           </div>
-          <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+          <span className="text-[11px] font-medium text-slate-600 dark:text-slate-300">
             {settings.theme === 'dark' ? 'Obsidian Black Night' : settings.theme === 'light' ? 'Day Clarity' : 'Device Auto'}
           </span>
         </div>
@@ -208,13 +208,13 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 onClick={() => handleThemeChange(item.id as AppSettings['theme'])}
                 className={`flex flex-col items-center justify-center p-3.5 rounded-2xl border text-xs font-semibold gap-1.5 transition-all active:scale-95 ${
                   isSelected
-                    ? 'border-accent bg-accent-container text-accent shadow-sm ring-2 ring-accent font-extrabold'
+                    ? 'border-accent bg-accent text-white shadow-sm ring-2 ring-accent font-extrabold'
                     : 'border-slate-200 dark:border-white/15 bg-white dark:bg-black text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-zinc-950 font-semibold'
                 }`}
               >
-                <Icon className={`w-5 h-5 ${isSelected ? 'text-accent stroke-[2.5]' : 'text-slate-500 dark:text-white stroke-[1.8]'}`} />
+                <Icon className={`w-5 h-5 ${isSelected ? 'text-white stroke-[2.5]' : 'text-slate-500 dark:text-white stroke-[1.8]'}`} />
                 <span className="font-bold">{item.label}</span>
-                <span className="text-[10px] font-normal text-slate-400 dark:text-slate-400">{item.desc}</span>
+                <span className={`text-[10px] font-normal ${isSelected ? 'text-white/90' : 'text-slate-500 dark:text-slate-300'}`}>{item.desc}</span>
               </button>
             );
           })}
@@ -227,12 +227,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               <Palette className="w-4 h-4 text-accent" />
               <span>Sacred Accent Colour</span>
             </label>
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+            <span className="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
               Chakra & Intention Resonances
             </span>
           </div>
 
-          <p className="text-[11px] text-slate-500 dark:text-slate-400">
+          <p className="text-[11px] text-slate-600 dark:text-slate-300">
             Choose the energetic resonance that anchors your goals, badges, icons, and primary buttons.
           </p>
 
@@ -257,7 +257,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                     >
                       {isSelected && <Check className="w-4 h-4 text-white stroke-[3]" />}
                     </span>
-                    <span className={`text-[10px] uppercase font-bold ${isSelected ? 'text-accent font-extrabold' : 'text-slate-400 dark:text-slate-400'}`}>
+                    <span className={`text-[10px] uppercase font-bold ${isSelected ? 'text-slate-900 dark:text-white font-extrabold' : 'text-slate-500 dark:text-slate-300'}`}>
                       {c.chakra.split(' ')[0]}
                     </span>
                   </div>
@@ -265,7 +265,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                     <h4 className="font-bold text-xs text-slate-900 dark:text-white leading-tight">
                       {c.name}
                     </h4>
-                    <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">
+                    <p className="text-[10px] text-slate-600 dark:text-slate-300 line-clamp-1 mt-0.5">
                       {c.description}
                     </p>
                   </div>
@@ -311,37 +311,37 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
 
             <button
               onClick={() => handleColorChange(customColor)}
-              className="px-4 py-2 rounded-full bg-accent text-white text-xs font-bold shadow-md hover-bg-accent transition active:scale-95"
+              className="px-4 py-2 rounded-full border border-slate-300 dark:border-white/20 bg-slate-900 dark:bg-white text-white dark:text-black text-xs font-bold shadow-md hover:opacity-90 transition active:scale-95"
             >
               Apply Hex
             </button>
           </div>
 
           {/* Live Preview Card */}
-          <div className="p-4 rounded-2xl border border-dashed border-accent-subtle bg-accent-container dark:bg-black/90 space-y-3 mt-3">
-            <div className="flex items-center justify-between text-[11px] font-bold text-accent uppercase tracking-wider">
+          <div className="p-4 rounded-2xl border border-dashed border-accent-subtle bg-slate-50 dark:bg-zinc-950 space-y-3 mt-3">
+            <div className="flex items-center justify-between text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
               <span className="flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-accent" />
                 <span>Live Resonance Preview</span>
               </span>
-              <span className="font-mono text-[10px] text-accent font-bold">{settings.accentColor}</span>
+              <span className="font-mono text-[10px] text-slate-800 dark:text-slate-200 font-bold">{settings.accentColor.toUpperCase()}</span>
             </div>
 
-            <h4 className="hero-text text-base font-extrabold flex items-center gap-2">
+            <h4 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-accent" />
               <span>Sacred Alignment Activated</span>
             </h4>
 
-            <p className="text-xs text-slate-700 dark:text-white leading-relaxed font-medium">
+            <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
               "The buttons, hero text, and icons dynamically change to your chosen sacred frequency."
             </p>
 
             <div className="flex flex-wrap items-center gap-2 pt-1">
-              <button className="px-4 py-2 rounded-full bg-accent hover-bg-accent text-white text-xs font-bold shadow-md active:scale-95 transition flex items-center gap-1.5">
+              <button className="px-4 py-2 rounded-full bg-accent text-white text-xs font-bold shadow-md active:scale-95 transition flex items-center gap-1.5">
                 <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>Primary Button</span>
               </button>
-              <button className="px-4 py-2 rounded-full bg-accent-container text-accent border border-accent-subtle text-xs font-bold active:scale-95 transition flex items-center gap-1.5">
+              <button className="px-4 py-2 rounded-full border border-accent bg-transparent text-accent text-xs font-bold active:scale-95 transition flex items-center gap-1.5">
                 <Sun className="w-3.5 h-3.5 text-accent" />
                 <span>Accent Button</span>
               </button>
@@ -360,7 +360,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <HardDrive className="w-4 h-4 text-accent" />
             <span>Storage Used/Available</span>
           </span>
-          <span className="normal-case font-mono text-slate-500">
+          <span className="normal-case font-mono text-slate-600 dark:text-slate-300">
             {storageInfo
               ? `${((storageInfo.usage || 0) / (1024 * 1024)).toFixed(1)} MB / ${storageInfo.remainingMb} MB`
               : 'Checking...'}
@@ -402,7 +402,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <h3 className="font-bold text-sm text-[#1b1b1c] dark:text-white">
               Daily Ritual Alerts
             </h3>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-slate-600 dark:text-slate-300">
               Morning goals (7:00 AM) & Evening journaling (8:00 PM)
             </p>
           </div>
@@ -413,7 +413,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           className={`px-4 py-2 rounded-full text-xs font-bold transition active:scale-95 ${
             notificationsEnabled
               ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-              : 'bg-accent hover-bg-accent text-white shadow-xs'
+              : 'bg-accent text-white shadow-xs'
           }`}
         >
           {notificationsEnabled ? 'Active ✓' : 'Enable'}
@@ -427,14 +427,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           <span>Complete Data Backup</span>
         </div>
 
-        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
           Export all your goals, journal reflections, scripting pages, and OPFS media into a single offline <strong>.zip</strong> archive.
         </p>
 
         <button
           disabled={isExporting}
           onClick={handleExportData}
-          className="w-full py-3.5 rounded-full bg-accent hover-bg-accent text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 transition active:scale-95 disabled:opacity-50"
+          className="w-full py-3.5 rounded-full bg-accent text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 transition active:scale-95 disabled:opacity-50"
         >
           <Download className="w-4 h-4" />
           <span>{isExporting ? 'Generating ZIP Archive...' : 'Download Full Archive (.zip)'}</span>
@@ -448,7 +448,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           target="_blank"
           rel="noopener noreferrer"
           className="bg-white dark:bg-black p-4 rounded-3xl border border-black/10 dark:border-white/15 shadow-2xs hover:border-accent-subtle hover:shadow-xs transition-all active:scale-95 flex items-center gap-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 group"
-          aria-label="View source code on GitHub"
+          aria-label="GitHub Repo — Source code on GitHub"
         >
           <div className="w-7 h-7 rounded-xl bg-slate-100 dark:bg-zinc-900 flex items-center justify-center group-hover:scale-105 transition-transform">
             <Github className="w-4 h-4 text-slate-800 dark:text-white" />
@@ -462,7 +462,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           target="_blank"
           rel="noopener noreferrer"
           className="bg-white dark:bg-black p-4 rounded-3xl border border-black/10 dark:border-white/15 shadow-2xs hover:border-amber-400/50 hover:shadow-xs transition-all active:scale-95 flex items-center gap-2.5 text-xs font-semibold text-slate-700 dark:text-slate-200 group"
-          aria-label="Support the app on Buy Me a Coffee"
+          aria-label="Support App — Buy Me a Coffee"
         >
           <div className="w-7 h-7 rounded-xl bg-amber-50 dark:bg-amber-950/40 flex items-center justify-center text-amber-500 group-hover:scale-105 transition-transform">
             <Coffee className="w-4 h-4 text-amber-500" />

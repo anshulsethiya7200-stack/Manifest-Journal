@@ -99,7 +99,11 @@ Zero backend, zero authentication, zero server. 100% of user data lives in the u
    - MediaRecorder recording saved directly to OPFS / Album.
 8. **Knowledge Screen (`/#knowledge`)**:
    - Principles of manifestation, subconscious reprogramming, the 3-6-9 Nikola Tesla method, rules of alignment.
-   - Curated video cards linking out to high-impact manifestation teachings.
+   - Curated video cards linking out to high-impact manifestation teachings with creator names:
+     1. Sadhguru — How to Manifest What You Really Want (`https://youtu.be/UwGSgJytufY?si=4-SrGXvKolk_NSA8`)
+     2. The Shikshit Talks — 369 Manifestation Technique (Tesla's Secret) (`https://youtu.be/PA3jBllt7RQ?si=ntmAmvsIGexlfh9n`)
+     3. Thinkspy — The Secret of Manifestation Explained (Law of Attraction) (`https://youtu.be/zvKlXfWQ2b8?si=X_wMXCK1pCisJT-Q`)
+     4. Cyber Zeel — Manifestation Technique in Hanuman Chalisa (`https://youtu.be/SQYHgnLKnLg?si=5lC8W453Ls4WXs6N`)
 9. **Settings Screen (`/#settings`)**:
    - Theme toggle (Light, Dark, System).
    - Accent color palette selector (Material You tonal variants).
@@ -137,3 +141,21 @@ Zero backend, zero authentication, zero server. 100% of user data lives in the u
   - Storage monitor label explicitly updated to "Storage Used/Available".
   - Onboarding "Who Are You" screen features two distinct explicit buttons: "Take a selfie" and "Upload profile picture".
   - Teleprompter overlay pinned to the absolute top of the viewport adjacent to the front camera area with a buttery-smooth 0.5x reading pace.
+
+---
+
+## Lighthouse 100/100 Compliance & Performance Optimizations
+- **Mobile Viewport Scalability (`index.html`)**:
+  - Replaced restrictive `user-scalable=no, maximum-scale=1.0` with accessible responsive viewport `<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />` to satisfy WCAG 1.4.4 zoom accessibility.
+- **Console Errors & 404 Resolution**:
+  - Created complete set of PWA icon assets (`/icons/icon-*.png`, `/favicon.ico`, `/apple-touch-icon.png`) preventing 404 network request failures in browser and service worker cache.
+  - Resolved JSON syntax errors in `manifest.json`.
+- **WCAG 2.1 AA Color Contrast (`src/lib/theme.ts`, `src/screens/SettingsScreen.tsx`, etc.)**:
+  - Calibrated all 8 Sacred Accent preset frequencies (`#0b57d0`, `#7c3aed`, `#047857`, `#b45309`, `#be123c`, `#0369a1`, `#c2410c`, `#334155`) to guarantee >= 4.7:1 contrast ratio with text.
+  - Implemented dynamic `--on-accent` luminance calculation algorithm ensuring button text is automatically contrasted (`#ffffff` or `#000000`).
+  - Updated all subtle text from low-contrast `slate-500` to high-contrast `text-slate-600 dark:text-slate-300` across settings, home, drawer, goals, and journal screens.
+- **WCAG 2.5.3 Label-in-Name Alignment**:
+  - Aligned accessible names (`aria-label`) on GitHub and Support links with visible button text ("GitHub Repo — ...", "Support App — ...").
+- **Asset Overhead & Critical Render Path**:
+  - Removed unused `Material Symbols Outlined` external stylesheet link from HTML head, eliminating render-blocking webfont payload.
+  - Enhanced image tags across album and journal entries with descriptive, non-redundant alternative text (`alt`).

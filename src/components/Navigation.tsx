@@ -127,7 +127,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) 
                 className={`flex items-center justify-center w-14 h-7 rounded-full transition-all duration-200 ${
                   isActive
                     ? 'bg-accent text-white shadow-xs scale-105'
-                    : 'text-slate-500 dark:text-slate-400 group-hover:text-accent dark:group-hover:text-accent'
+                    : 'text-slate-600 dark:text-slate-300 group-hover:text-accent dark:group-hover:text-accent'
                 }`}
               >
                 <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.4]' : 'stroke-[1.8]'}`} />
@@ -136,7 +136,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) 
                 className={`text-[11px] font-medium tracking-tight mt-0.5 transition-colors ${
                   isActive
                     ? 'text-accent font-bold'
-                    : 'text-slate-500 dark:text-slate-400 group-hover:text-accent'
+                    : 'text-slate-600 dark:text-slate-300 group-hover:text-accent'
                 }`}
               >
                 {tab.label}

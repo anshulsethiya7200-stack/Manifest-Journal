@@ -88,6 +88,10 @@ svg.accent-icon {
   background-color: var(--accent-color, #0b57d0) !important;
 }
 
+.text-on-accent {
+  color: var(--on-accent, #ffffff) !important;
+}
+
 .hover-bg-accent:hover {
   background-color: var(--accent-hover, #0842a0) !important;
 }
@@ -114,7 +118,7 @@ svg.accent-icon {
 
 .btn-accent {
   background-color: var(--accent-color, #0b57d0) !important;
-  color: #ffffff !important;
+  color: var(--on-accent, #ffffff) !important;
 }
 
 .btn-accent:hover {

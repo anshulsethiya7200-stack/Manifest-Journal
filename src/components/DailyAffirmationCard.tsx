@@ -109,7 +109,7 @@ export const DailyAffirmationCard: React.FC<DailyAffirmationCardProps> = ({ onNa
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
             <span>Daily Affirmation</span>
           </div>
-          <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 hidden sm:inline-block">
+          <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 hidden sm:inline-block">
             {affirmation.category}
           </span>
         </div>
@@ -121,7 +121,7 @@ export const DailyAffirmationCard: React.FC<DailyAffirmationCardProps> = ({ onNa
             className={`w-8 h-8 rounded-full flex items-center justify-center transition active:scale-95 ${
               isSpeaking
                 ? 'bg-accent text-white shadow-xs'
-                : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
+                : 'text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10'
             }`}
             title={isSpeaking ? 'Mute affirmation' : 'Listen aloud'}
             aria-label={isSpeaking ? 'Mute affirmation' : 'Listen aloud'}
@@ -131,7 +131,7 @@ export const DailyAffirmationCard: React.FC<DailyAffirmationCardProps> = ({ onNa
 
           <button
             onClick={handleCopy}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition active:scale-95"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition active:scale-95"
             title={isCopied ? 'Copied to clipboard' : 'Copy quote'}
             aria-label={isCopied ? 'Copied to clipboard' : 'Copy quote'}
           >
@@ -145,7 +145,7 @@ export const DailyAffirmationCard: React.FC<DailyAffirmationCardProps> = ({ onNa
           <button
             onClick={handleShuffle}
             disabled={isShuffling}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition active:scale-95 disabled:opacity-50"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition active:scale-95 disabled:opacity-50"
             title="Draw another affirmation"
             aria-label="Draw another affirmation"
           >
@@ -160,12 +160,12 @@ export const DailyAffirmationCard: React.FC<DailyAffirmationCardProps> = ({ onNa
           "{affirmation.quote}"
         </blockquote>
 
-        <div className="flex flex-wrap items-center justify-between gap-1 pt-1 text-[11px] text-slate-500 dark:text-slate-400">
+        <div className="flex flex-wrap items-center justify-between gap-1 pt-1 text-[11px] text-slate-600 dark:text-slate-300">
           <span className="font-medium">
-            Focus: <span className="text-slate-700 dark:text-slate-300 font-semibold">{affirmation.focusIntent}</span>
+            Focus: <span className="text-slate-800 dark:text-white font-semibold">{affirmation.focusIntent}</span>
           </span>
           {affirmation.source && (
-            <span className="font-mono text-[10px] text-slate-400">
+            <span className="font-mono text-[10px] text-slate-600 dark:text-slate-300">
               — {affirmation.source}
             </span>
           )}

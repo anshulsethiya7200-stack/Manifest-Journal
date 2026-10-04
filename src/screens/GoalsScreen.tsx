@@ -161,7 +161,7 @@ export const GoalsScreen: React.FC<GoalsScreenProps> = ({ onRefreshData }) => {
         <h2 className="text-2xl font-extrabold hero-text">
           Multi-Horizon Intentions
         </h2>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+        <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
           Hold clear targets across day, month, year, and decades. Reality contracts to meet disciplined focus.
         </p>
       </div>
@@ -187,7 +187,7 @@ export const GoalsScreen: React.FC<GoalsScreenProps> = ({ onRefreshData }) => {
                     <h3 className="font-bold text-sm text-[#1b1b1c] dark:text-white">
                       {config.label}
                     </h3>
-                    <p className="text-[10px] text-slate-400">{config.description}</p>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400">{config.description}</p>
                   </div>
                 </div>
 
@@ -203,7 +203,7 @@ export const GoalsScreen: React.FC<GoalsScreenProps> = ({ onRefreshData }) => {
                   </p>
 
                   <div className="flex items-center justify-between text-xs pt-1">
-                    <div className="flex items-center gap-1.5 font-medium text-slate-500">
+                    <div className="flex items-center gap-1.5 font-medium text-slate-600 dark:text-slate-300">
                       <Clock className="w-3.5 h-3.5 text-accent" />
                       <span className={isExpired ? 'text-rose-600 font-bold' : ''}>
                         {formatCountdown(activeGoal.deadline)}

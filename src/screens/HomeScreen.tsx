@@ -95,12 +95,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </span>
             <span className="text-amber-400">✨</span>
           </h2>
-          <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-sm font-medium text-slate-600 dark:text-slate-300 mt-1">
             {formattedDate}
           </p>
         </div>
 
-        <div className="pt-3 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
+        <div className="pt-3 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-xs text-slate-600 dark:text-slate-300">
           <span className="font-medium">Alignment: Grounded & Present</span>
           <span className="font-semibold text-accent flex items-center gap-1">
             <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
@@ -121,7 +121,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             <h3 className="font-bold text-base text-[#1b1b1c] dark:text-white">
               Today's Goal
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 line-clamp-3 leading-relaxed">
+            <p className="text-xs text-slate-600 dark:text-slate-300 mt-2 line-clamp-3 leading-relaxed">
               {todayGoal
                 ? todayGoal.text
                 : 'No active micro-intention set for today yet.'}
@@ -163,7 +163,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             <h3 className="font-bold text-base text-[#1b1b1c] dark:text-white">
               This Month's Goal
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 line-clamp-3 leading-relaxed">
+            <p className="text-xs text-slate-600 dark:text-slate-300 mt-2 line-clamp-3 leading-relaxed">
               {monthGoal
                 ? monthGoal.text
                 : 'No monthly milestone active. Hold a 30-day vision.'}
@@ -173,7 +173,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           <div>
             {monthGoal ? (
               <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
                   <span>Progress</span>
                   <span>
                     {monthGoal.progressCurrent || 0} / {monthGoal.progressTarget || 30}
