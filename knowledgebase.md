@@ -31,9 +31,10 @@ Zero backend, zero authentication, zero server. 100% of user data lives in the u
     - Pervasively colors all active bottom navigation pills, top bar badges, primary action buttons, streak indicators, borders, FABs, and live preview cards across the application.
     - Dynamic `.hero-text` class binds all primary headings, greeting titles, section headers, and hero labels directly to the chosen sacred accent color.
     - All action buttons (`.bg-accent`, `.hover-bg-accent`, `.btn-accent`) uniformly inherit the user's sacred accent frequency.
-  - **Scripting Notebook Contrast in Dark Mode**:
-    - High-contrast dark notebook paper aesthetic: deep `#101217` background with crisp white-tinted ruled lines (`rgba(255, 255, 255, 0.16)`) and an illuminated red margin guide (`rgba(239, 68, 68, 0.55)`).
-    - In dark mode, textarea text is forced to pure white (`#ffffff` and `-webkit-text-fill-color: #ffffff`) with high-visibility placeholder (`rgba(255, 255, 255, 0.45)`) and matching sacred accent caret and text selection.
+  - **Scripting Notebook Clean Aesthetic**:
+    - Clean ruled paper aesthetic with pure horizontal ruled lines (`#e5e7eb` in light mode, `rgba(255, 255, 255, 0.18)` in dark mode) without any red vertical margin line.
+    - Writing starts directly from the top left corner of the scripting page just above the ruled line (elevated ~10px above previous placement for baseline alignment).
+    - In dark mode, textarea text is forced to pure white (`#ffffff` and `-webkit-text-fill-color: #ffffff`) with high-visibility placeholder (`rgba(255, 255, 255, 0.5)`) and matching sacred accent caret and text selection.
   - **Dark Mode Responsive Gradients**:
     - `.hero-gradient`, `.streak-gradient`, `.card-gradient`, and `.pwa-banner-gradient` dynamically transform in dark mode into obsidian/slate deep gradients (`#181b22` to `#121418`) accented with subtle sacred frequency glows.
 - **Storage Strategy**:
@@ -139,7 +140,7 @@ Zero backend, zero authentication, zero server. 100% of user data lives in the u
   - All primary buttons, hero text, and icons dynamically adopt the chosen Sacred Accent Color.
   - Storage monitor label explicitly updated to "Storage Used/Available".
   - Onboarding "Who Are You" screen features two distinct explicit buttons: "Take a selfie" and "Upload profile picture".
-  - Teleprompter overlay pinned to the absolute top of the viewport adjacent to the front camera area with a buttery-smooth 0.5x reading pace.
+  - Teleprompter overlay positioned directly at the top of the viewport immediately adjacent to the front camera lens with compact eye-level indicator, elevated text container, and buttery-smooth 0.5x reading pace.
 
 ---
 

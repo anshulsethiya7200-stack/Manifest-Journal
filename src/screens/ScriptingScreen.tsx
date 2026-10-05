@@ -147,13 +147,13 @@ export const ScriptingScreen: React.FC<ScriptingScreenProps> = ({ initialState, 
         </div>
 
         {/* Notebook Lined Content Area */}
-        <div className="notebook-ruled-paper px-6 py-4 min-h-[360px] relative">
+        <div className="notebook-ruled-paper pl-2 pr-3 pt-0 pb-4 min-h-[360px] relative">
           <textarea
             value={currentPage?.content || ''}
             onChange={(e) => handleContentChange(e.target.value)}
             placeholder="Write your reality into being as if it has already occurred in the present moment..."
-            className="w-full h-full min-h-[340px] bg-transparent resize-none border-none outline-hidden text-slate-900 dark:text-white dark:placeholder:text-slate-400 font-medium text-base leading-[32px] tracking-wide"
-            style={{ lineHeight: '32px' }}
+            className="w-full h-full min-h-[340px] bg-transparent resize-none border-none outline-hidden text-slate-900 dark:text-white dark:placeholder:text-slate-400 font-medium text-base leading-[32px] tracking-wide p-0 m-0"
+            style={{ lineHeight: '32px', marginTop: '-4px' }}
           />
         </div>
 

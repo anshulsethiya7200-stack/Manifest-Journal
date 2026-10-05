@@ -346,33 +346,33 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
           </div>
 
           {/* Top Bar with Camera Eye-Level Badge */}
-          <div className="relative z-20 flex items-center justify-between px-4 pt-3 pb-1">
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-bold px-3 py-1 bg-black/80 rounded-full border border-white/20 backdrop-blur-md text-amber-300 flex items-center gap-1.5 shadow">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="relative z-20 flex items-center justify-between px-3 pt-1 pb-0.5">
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] font-bold px-2 py-0.5 bg-black/80 rounded-full border border-white/20 backdrop-blur-md text-amber-300 flex items-center gap-1 shadow">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span>Camera Eye-Level</span>
               </span>
-              <span className="text-xs font-semibold px-2.5 py-1 bg-black/60 rounded-full border border-white/15 backdrop-blur-xs text-white/90">
+              <span className="text-[10px] font-semibold px-2 py-0.5 bg-black/60 rounded-full border border-white/15 backdrop-blur-xs text-white/90">
                 {speed.toFixed(1)}x pace
               </span>
             </div>
             <button
               onClick={finishRecording}
-              className="px-3.5 py-1.5 rounded-full bg-white/20 text-xs font-semibold hover:bg-white/30 backdrop-blur-xs active:scale-95 transition"
+              className="px-2.5 py-0.5 rounded-full bg-white/20 text-xs font-semibold hover:bg-white/30 backdrop-blur-xs active:scale-95 transition"
             >
               Exit
             </button>
           </div>
 
-          {/* Top-Pinned Scrolling Script Overlay: Directly adjacent to front camera area */}
-          <div className="relative z-20 w-full max-w-lg mx-auto px-4 pt-1">
+          {/* Top-Pinned Scrolling Script Overlay: Shifted directly to top near front camera */}
+          <div className="relative z-20 w-full max-w-lg mx-auto px-2.5 pt-0">
             <div
               ref={scrollContainerRef}
-              className="h-[36vh] sm:h-[40vh] overflow-y-auto no-scrollbar rounded-2xl bg-black/65 backdrop-blur-md border border-white/15 p-5 text-center select-none shadow-2xl"
+              className="h-[38vh] sm:h-[42vh] overflow-y-auto no-scrollbar rounded-2xl bg-black/65 backdrop-blur-md border border-white/15 px-3 pt-0 pb-3 text-center select-none shadow-2xl"
               style={{ scrollBehavior: 'auto' }}
             >
-              <div className="py-6">
-                <p className="text-xl sm:text-2xl font-bold leading-relaxed tracking-wide text-white/70">
+              <div className="pt-0 pb-6 -mt-1">
+                <p className="text-xl sm:text-2xl font-bold leading-snug tracking-wide text-white/70 pt-0 mt-0">
                   {wordsRef.current.map((word, idx) => {
                     const isCurrent = idx === currentWordIndex;
                     return (
