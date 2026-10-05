@@ -12,7 +12,7 @@ A private, offline-first journaling and manifestation PWA — built for people w
 [![Local First](https://img.shields.io/badge/Storage-IndexedDB%20%2B%20OPFS-444746)](https://web.dev/storage-for-the-web/)
 [![No Server](https://img.shields.io/badge/Backend-None-success)](https://localfirstweb.dev/)
 
-[Install the App](#installation) · [Features](#features) · [Screenshots](#screenshots) · [How It Works](#how-it-works) · [Export Your Data](#exporting-your-data) · [Contributing](#contributing) · [Support](#support)
+[Install the App](#installation) · [Features](#features) · [Screenshots](#screenshots) · [How It Works](#how-it-works) · [Export Your Data](#exporting-your-data) · [Privacy & Policies](public/policy.html) · [Contributing](#contributing) · [Support](#support)
 
 </div>
 
@@ -32,7 +32,7 @@ Manifest Journal is a **completely private, local-first** Progressive Web App fo
 Start your journey with a one-time pledge. Enter your name, date of birth, gender, and a selfie. Listen to your pledge read aloud, sign it with your finger, and write your personal "If I fail, I will quit ______" clause. A ceremony that makes it real.
 
 ### 📚 Knowledge: Learn to Manifest
-A comprehensive, always-available guide covering what manifestation is, why it works, the **3-6-9 method** step by step, and curated YouTube links — no internet needed to read it.
+A comprehensive, always-available guide covering what manifestation is, why it works, the **3-6-9 method** step by step, and ancient rules of conscious alignment — 100% offline, no internet needed to read it.
 
 ### 🎯 Goals — 5 Layers of Vision
 Set goals across five time horizons:
@@ -240,12 +240,12 @@ Manifest Journal is open source. Contributions are welcome.
 
 ```bash
 # Clone the repo
-git clone https://github.com/[your-username]/manifest-journal.git
-cd manifest-journal
+git clone https://github.com/anshulsethiya7200-stack/Manifest-Journal.git
+cd Manifest-Journal
 
-# No build step needed — open index.html directly
-# Or serve locally (required for Service Worker + OPFS):
-npx serve .
+# Install dependencies and start local dev server:
+npm install
+npm run dev
 # Then open http://localhost:3000
 ```
 
@@ -254,6 +254,13 @@ npx serve .
 - Keep it local-first. No feature should require a network connection or a server.
 - Follow the Material Design 3 token system — no hardcoded colors.
 - Test on at least Chrome Android and Safari iOS before submitting a PR.
+
+---
+
+## 🔒 Privacy, Terms of Use & Security Policy
+
+Manifest Journal is private by architecture, not just by policy. There is no remote server, no user tracking, and no external data storage.
+- **[Read the Full Privacy Policy, Terms of Use, and Security Policy](public/policy.html)**
 
 ---
 
@@ -271,6 +278,6 @@ If Manifest Journal has brought value to your life or practice, consider buying 
 
 Made with intention. Built for privacy. Kept on your device.
 
-**Manifest Journal** · [Report an Issue](https://github.com/[your-username]/manifest-journal/issues) · [GitHub](https://github.com/[your-username]/manifest-journal)
+**Manifest Journal** · [Report an Issue](https://github.com/anshulsethiya7200-stack/Manifest-Journal/issues) · [GitHub](https://github.com/anshulsethiya7200-stack/Manifest-Journal)
 
 </div>

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manifest Journal — Legal Policies, Terms of Use & Security</title>
+  <meta name="description" content="Official Privacy Policy, Terms of Use, and Security Policy for Manifest Journal, a local-first, zero-server Progressive Web App developed by Anshul Sethiya.">
+  <style>
+    :root {
+      --primary: #0b57d0;
+      --primary-dark: #1a0dab;
+      --on-primary: #ffffff;
+      --background: #ffffff;
+      --surface: #f8f9fa;
+      --surface-container: #f0f4ff;
+      --on-surface: #1f1f1f;
+      --on-surface-variant: #444746;
+      --outline: #c4c7c5;
+      --accent: #1a0dab;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --background: #0f0f0f;
+        --surface: #1c1c1e;
+        --surface-container: #1a1f2e;
+        --on-surface: #e3e3e3;
+        --on-surface-variant: #9aa0a6;
+        --outline: #3c3c3e;
+      }
+    }
+
+    html {
+      scroll-behavior: smooth;
+      box-sizing: border-box;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      background-color: var(--background);
+      color: var(--on-surface);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Sticky App Navigation Bar */
+    header.top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--primary);
+      color: var(--on-primary);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .top-bar-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: var(--on-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    nav.nav-tabs {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tab-btn {
+      color: var(--on-primary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 20px;
+      transition: background-color 0.2s ease, opacity 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab-btn:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .tab-btn[aria-current="true"] {
+      background-color: rgba(255, 255, 255, 0.28);
+      font-weight: 700;
+    }
+
+    /* Main Container */
+    main.legal-container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 24px 80px 24px;
+    }
+
+    /* Section Headers */
+    .document-section {
+      padding-top: 20px;
+    }
+
+    .doc-header {
+      margin-bottom: 32px;
+    }
+
+    h1.doc-title {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--on-surface);
+      margin: 0 0 10px 0;
+    }
+
+    .doc-meta {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    /* Headings and Paragraphs */
+    h2.section-heading {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin: 32px 0 12px 0;
+      line-height: 1.4;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      h2.section-heading {
+        color: #79a6ff;
+      }
+    }
+
+    p {
+      margin: 0 0 18px 0;
+      color: var(--on-surface);
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    ul, ol {
+      margin: 0 0 18px 0;
+      padding-left: 24px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .highlight-card {
+      background-color: var(--surface-container);
+      border-left: 4px solid var(--primary);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 24px 0;
+      font-weight: 500;
+    }
+
+    .highlight-card p {
+      margin: 0;
+      text-align: left;
+    }
+
+    .code-block {
+      background-color: var(--surface);
+      border: 1px solid var(--outline);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Roboto Mono', Consolas, Monaco, monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin: 18px 0;
+      color: var(--on-surface);
+    }
+
+    /* Section Dividers */
+    hr.document-divider {
+      border: 0;
+      border-top: 2px solid var(--outline);
+      margin: 64px 0;
+    }
+
+    /* Links */
+    a {
+      color: var(--primary);
+      text-decoration: underline;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    /* Footer */
+    footer.legal-footer {
+      text-align: center;
+      padding: 32px 24px;
+      border-top: 1px solid var(--outline);
+      color: var(--on-surface-variant);
+      font-size: 14px;
+      background-color: var(--surface);
+    }
+
+    footer.legal-footer a {
+      color: var(--on-surface-variant);
+      font-weight: 600;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 568px) {
+      body {
+        font-size: 15px;
+      }
+
+      .top-bar-inner {
+        padding: 0 16px;
+      }
+
+      .brand-title {
+        font-size: 16px;
+      }
+
+      .tab-btn {
+        font-size: 12px;
+        padding: 6px 10px;
+      }
+
+      h1.doc-title {
+        font-size: 24px;
+      }
+
+      h2.section-heading {
+        font-size: 17px;
+      }
+
+      main.legal-container {
+        padding: 24px 16px 64px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Top Navigation Bar -->
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <a href="#privacy" class="brand-title" aria-label="Manifest Journal Home">
+        <span>Manifest Journal</span>
+      </a>
+      <nav class="nav-tabs" role="tablist" aria-label="Legal Documents Navigation">
+        <a href="#privacy" id="tab-privacy" role="tab" class="tab-btn" aria-controls="privacy" aria-current="true">Privacy</a>
+        <a href="#terms" id="tab-terms" role="tab" class="tab-btn" aria-controls="terms">Terms</a>
+        <a href="#security" id="tab-security" role="tab" class="tab-btn" aria-controls="security">Security</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="legal-container">
+
+    <!-- =================================================================== -->
+    <!-- DOCUMENT 1 — PRIVACY POLICY                                         -->
+    <!-- =================================================================== -->
+    <section id="privacy" class="document-section" aria-labelledby="privacy-heading">
+      <div class="doc-header">
+        <h1 id="privacy-heading" class="doc-title">Privacy Policy</h1>
+        <p class="doc-meta">Effective Date: TBD — fill before publishing &nbsp;|&nbsp; Last Updated: TBD — fill before publishing</p>
+      </div>
+
+      <div class="highlight-card">
+        <p><strong>Core Guarantee:</strong> Manifest Journal is private by architecture, not just by policy — we cannot share your data because we never receive it.</p>
+      </div>
+
+      <h2 class="section-heading">1. Who We Are</h2>
+      <p>
+        Manifest Journal ("the Application", "the App", "we", "us", or "our") is an open-source, local-first Progressive Web Application developed by Anshul Sethiya, located in Wardha, Maharashtra, India. The application is distributed free of charge under the permissive MIT Open Source License. You can inspect the entire underlying source code and verify all technical claims made in this document by reviewing the official public code repository hosted on GitHub at <a href="https://github.com/anshulsethiya7200-stack/Manifest-Journal" target="_blank" rel="noopener noreferrer">https://github.com/anshulsethiya7200-stack/Manifest-Journal</a>. For any legal inquiries or privacy clarifications, the developer can be contacted directly via email at <a href="mailto:anshuljain1189@gmail.com">anshuljain1189@gmail.com</a>.
+      </p>
+
+      <h2 class="section-heading">2. The Core Principle</h2>
+      <p>
+        The defining architectural design of Manifest Journal is absolute local privacy. No personal data, written entries, goal definitions, multimedia files, identity credentials, or telemetry metrics are collected, transmitted, stored on any remote server, or shared with any third-party entity. Ever. This commitment is not merely an aspirational policy promise or contractual declaration; it is a structural mathematical guarantee enforced by the software architecture itself. There is no remote backend server, no cloud database, no user authentication platform, and no remote API endpoint configured anywhere in this software to receive or process your data.
+      </p>
+
+      <h2 class="section-heading">3. Data We Do Not Collect</h2>
+      <p>
+        To ensure complete legal transparency, we maintain an exhaustive list of information that is never collected, logged, or observed by the developer or any intermediaries:
+      </p>
+      <p>
+        We do not collect your legal name, date of birth, age, gender identity, selfie photographs, avatar pictures, personal pledge statements, signed covenant agreements, custom quit clauses, handwritten signature biometric strokes, daily journal reflections, time-stamped thoughts, multi-horizon goals, 3-6-9 manifestation notebook scripts, album photographs, spoken video affirmations, teleprompter recording files, audio tracks, IP addresses, geolocation data, Wi-Fi network information, unique device identifiers (IMEI, MAC address, advertising ID), operating system metadata, browser fingerprints, application usage analytics, session duration metrics, error logs, crash telemetry, persistent HTTP cookies, session tracking tokens, or any third-party tracking identifiers. All interactions occur exclusively inside your local device runtime environment.
+      </p>
+
+      <h2 class="section-heading">4. How Your Data Is Stored</h2>
+      <p>
+        All information you author or capture inside Manifest Journal is stored entirely on your physical device using standard client-side browser storage sandboxes:
+      </p>
+      <p>
+        Structured user data—including your local profile records, multi-horizon goals, daily journal entries, scripting pages, teleprompter written scripts, album metadata, streak counters, and application appearance preferences—is persisted locally using the browser's native IndexedDB database engine (under the database name <code>manifest-journal-db</code>). High-capacity binary media assets—specifically your captured photos, video affirmations, and recorded spoken teleprompter sessions—are written directly to the Origin Private File System (OPFS), an encrypted, highly performant browser-isolated sandboxed virtual file system accessible only through secure origin APIs.
+      </p>
+      <p>
+        Both IndexedDB and the Origin Private File System are strictly sandboxed to the exact web origin of Manifest Journal by the browser's same-origin security model. They are completely inaccessible to other websites, inaccessible to external third-party software, inaccessible to the developer, and are permanently erased whenever you choose to clear your browser's site storage.
+      </p>
+
+      <h2 class="section-heading">5. Camera and Microphone Usage</h2>
+      <p>
+        Manifest Journal requests access to your device's camera and microphone strictly for real-time, user-directed capture features: taking your initial onboarding selfie, capturing intentional photos or video affirmations in the Album, and recording spoken affirmation rehearsals within the Teleprompter module.
+      </p>
+      <p>
+        Media streams are processed entirely in local volatile memory. The raw video and audio streams never leave your device and are never broadcast or streamed across any computer network. When a capture is finalized, the resulting binary file is saved solely into your private OPFS sandbox on your hardware. Media assets captured within Manifest Journal are NOT automatically copied or exposed to your device operating system's general photo library or camera roll, ensuring complete confidentiality from other device applications unless you explicitly tap the "Download" button to manually save a specific file. Whenever a camera or microphone interface is closed, all hardware media tracks are immediately and permanently terminated.
+      </p>
+
+      <h2 class="section-heading">6. Notifications and Reminders</h2>
+      <p>
+        Manifest Journal provides optional daily ritual reminders (such as morning goal setting and evening journaling reflection). These notifications are generated entirely on-device by the registered Progressive Web App Service Worker (<code>sw.js</code>). The application does not utilize any external Web Push server, does not maintain a cloud notification delivery pipeline, and does not register a push subscription token with any remote service.
+      </p>
+      <p>
+        Permission to display notifications is requested only after you intentionally complete your personal Commitment ceremony. You retain full control over this capability at all times; revoking notification permissions in your browser or operating system settings instantly and permanently silences all scheduled local alerts without impacting any other app functionality.
+      </p>
+
+      <h2 class="section-heading">7. Third-Party Services</h2>
+      <p>
+        Manifest Journal avoids third-party dependencies. The only external network resource queried by the application is Google Fonts (hosted across <code>fonts.googleapis.com</code> and <code>fonts.gstatic.com</code>) to deliver the typographic Roboto typeface stylesheet. When you first load the application online, your browser issues a standard HTTP request to Google's content delivery servers, transmitting your temporary IP address as part of normal web routing. Once downloaded, the application Service Worker caches the font files locally within browser cache storage, and Google's servers are never contacted again during subsequent offline or online launches. For information on how Google handles font network requests, you may consult <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>.
+      </p>
+      <p>
+        The Knowledge screen contains informative educational text on manifestation principles. Manifest Journal loads zero third-party tracking scripts, zero social media pixels, zero software development kits (SDKs), and zero third-party advertising frameworks.
+      </p>
+
+      <h2 class="section-heading">8. Data Export and Portability</h2>
+      <p>
+        You maintain unconditional ownership and sovereignty over your data. Manifest Journal provides a built-in export mechanism accessible via <em>Settings &rarr; Complete Data Backup</em>. When invoked, a lightweight, client-side JavaScript archiving engine (JSZip) bundles all your IndexedDB database records (serialized as human-readable JSON files) and all your stored OPFS binary photos and video recordings into a single offline archive named in the format <code>manifest-journal-export-YYYY-MM-DD.zip</code>.
+      </p>
+      <p>
+        This archive is generated strictly in local volatile memory and triggered as a direct browser file download to your device storage. The data is never uploaded, inspected, or buffered on any server. Because the resulting ZIP archive is unencrypted for maximum open portability, we strongly advise users to store their exported archives on password-protected or hardware-encrypted storage media, treating the file with the same confidentiality as a personal paper diary.
+      </p>
+
+      <h2 class="section-heading">9. Data Deletion and Erasure</h2>
+      <p>
+        You have absolute authority to delete all your information at any moment through three independent methods:
+      </p>
+      <ul>
+        <li><strong>In-App Immediate Reset:</strong> Navigating to <em>Settings &rarr; Clear All Data & Reset App</em> immediately executes an automated wipe of all IndexedDB database object stores, purges all stored media from the Origin Private File System, unregisters active service worker caches, and resets application state to a clean slate.</li>
+        <li><strong>Browser Storage Management:</strong> Clearing cookies and site data for the application's domain within your browser settings instantly deletes the sandboxed IndexedDB storage and OPFS directory.</li>
+        <li><strong>PWA Uninstallation:</strong> Removing the Progressive Web App from your mobile home screen or desktop application manager and confirming the deletion of associated offline site data accomplishes complete erasure.</li>
+      </ul>
+      <p>
+        Please note that because the developer maintains no servers, accounts, or cloud backups, once data deletion is performed, your information is permanently and irretrievably erased. We cannot recover deleted journals, goals, or media under any circumstances.
+      </p>
+
+      <h2 class="section-heading">10. Children's Privacy</h2>
+      <p>
+        Manifest Journal is intended for use by individuals aged 13 and above. Because the application does not collect, harvest, store, or transmit personal information from any user regardless of age, compliance with global child privacy regulations—including the United States Children's Online Privacy Protection Act (COPPA), the European Union General Data Protection Regulation (GDPR), and India's Digital Personal Data Protection Act (DPDPA)—is satisfied inherently by our zero-collection technical design.
+      </p>
+
+      <h2 class="section-heading">11. Changes to This Privacy Policy</h2>
+      <p>
+        We may occasionally update this Privacy Policy to reflect technical refinements, browser specification updates, or structural enhancements to the application. If any future modification alters the architectural privacy model of the application, this document will be updated immediately, and the "Last Updated" date at the top of this document will be amended accordingly. No data collection or transmission mechanism will ever be introduced without explicit documentation within this policy.
+      </p>
+
+      <h2 class="section-heading">12. Contact Information</h2>
+      <p>
+        If you have questions, feedback, or require technical verification regarding this Privacy Policy, please contact developer Anshul Sethiya via email at <a href="mailto:anshuljain1189@gmail.com">anshuljain1189@gmail.com</a>, or submit a technical inquiry via the public GitHub repository issue tracker at <a href="https://github.com/anshulsethiya7200-stack/Manifest-Journal/issues" target="_blank" rel="noopener noreferrer">https://github.com/anshulsethiya7200-stack/Manifest-Journal/issues</a>.
+      </p>
+
+      <h2 class="section-heading">13. Closing Summary</h2>
+      <p>
+        Manifest Journal is private by architecture, not just by policy — we cannot share your data because we never receive it.
+      </p>
+    </section>
+
+    <hr class="document-divider">
+
+    <!-- =================================================================== -->
+    <!-- DOCUMENT 2 — TERMS OF USE                                           -->
+    <!-- =================================================================== -->
+    <section id="terms" class="document-section" aria-labelledby="terms-heading">
+      <div class="doc-header">
+        <h1 id="terms-heading" class="doc-title">Terms of Use</h1>
+        <p class="doc-meta">Effective Date: TBD — fill before publishing &nbsp;|&nbsp; Last Updated: TBD — fill before publishing</p>
+      </div>
+
+      <h2 class="section-heading">1. Acceptance of Terms</h2>
+      <p>
+        By loading, accessing, browsing, installing, or otherwise using the Manifest Journal Progressive Web Application, you signify your agreement to be bound by these Terms of Use ("Terms"). If you do not agree with any provision set forth in these Terms, your sole recourse is to discontinue use of the application and remove it from your device immediately.
+      </p>
+
+      <h2 class="section-heading">2. What the App Is</h2>
+      <p>
+        Manifest Journal is a free, local-first, open-source software utility designed for personal journaling, goal organization, affirmation recitation, and manifestation habit tracking. The software is released and licensed under the permissive terms of the MIT License. Manifest Journal is provided entirely without subscription fees, commercial paywalls, account registrations, or monetization mechanisms. It functions entirely autonomously on compatible client web browsers.
+      </p>
+
+      <h2 class="section-heading">3. Your Responsibility for Your Data and Backups</h2>
+      <p>
+        Because Manifest Journal operates entirely on-device with zero server synchronization, you acknowledge and agree that you are solely and exclusively responsible for the preservation, safeguarding, and backup of all data authored within the application. Specifically:
+      </p>
+      <ul>
+        <li>You are responsible for regularly exporting your data via <em>Settings &rarr; Complete Data Backup</em> to maintain offline backups of your journals, goals, scripts, and media files. We strongly recommend creating a weekly export.</li>
+        <li>You are responsible for securing your physical device using screen locks, biometric authentication, and operating system encryption to prevent unauthorized physical access to your records.</li>
+        <li>You acknowledge that clearing browser storage, resetting application caches, device operating system updates, browser vendor automated storage eviction, hardware theft, or physical device damage can result in irreversible data loss for which the developer bears no responsibility or liability.</li>
+      </ul>
+
+      <h2 class="section-heading">4. Acceptable Use</h2>
+      <p>
+        You agree to use Manifest Journal exclusively for lawful, personal, non-commercial purposes in compliance with all applicable local, national, and international laws, regulations, and statutes. You agree not to redistribute, repackage, or relicense modified copies of this software in any manner that removes, obscures, or misrepresents the foundational local-first privacy commitments and security disclosures set forth in this document.
+      </p>
+
+      <h2 class="section-heading">5. Open Source Licensing</h2>
+      <p>
+        Manifest Journal is open-source software licensed under the MIT License. The complete, unmodified source code is freely inspectable and accessible at <a href="https://github.com/anshulsethiya7200-stack/Manifest-Journal" target="_blank" rel="noopener noreferrer">https://github.com/anshulsethiya7200-stack/Manifest-Journal</a>. Subject to the conditions of the MIT License, you are free to inspect, fork, modify, adapt, and self-host your own instances of the software, provided that the original copyright notice and permission notice remain included in all substantial copies.
+      </p>
+
+      <h2 class="section-heading">6. Camera and Microphone Permissions</h2>
+      <p>
+        Certain optional capabilities within Manifest Journal—specifically capturing your commitment selfie, taking manifestation photographs, recording affirmation videos, and rehearsing teleprompter scripts—require client access to your device camera and microphone hardware. You grant the application temporary client-side permission to stream media feeds strictly while you are actively utilizing those features. The developer does not receive, view, or intercept any audio or video stream. You maintain the right to revoke camera and microphone permissions at any time through your web browser or operating system privacy settings.
+      </p>
+
+      <h2 class="section-heading">7. Notification Permissions</h2>
+      <p>
+        Manifest Journal allows you to enable optional client-side browser notifications to alert you to scheduled morning and evening manifestation rituals. All notification timing and delivery mechanisms are executed strictly on your local hardware by the registered Service Worker without external communication. You may grant or deny this permission at your discretion and may revoke notification capabilities at any time through your browser settings without penalty.
+      </p>
+
+      <h2 class="section-heading">8. Disclaimer of Warranties (MIT License)</h2>
+      <p>
+        IN ACCORDANCE WITH THE MIT LICENSE, THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, ACCURACY, AVAILABILITY, SECURITY, OR NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHOR, DEVELOPER, OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, DATA LOSS, DEVICE MALFUNCTION, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+      </p>
+
+      <h2 class="section-heading">9. Limitation of Liability</h2>
+      <p>
+        TO THE MAXIMUM EXTENT PERMITTED UNDER APPLICABLE LAW, IN NO EVENT SHALL DEVELOPER ANSHUL SETHIYA BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY DIRECT, INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, PUNITIVE, OR EXEMPLARY DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF DATA, LOSS OF PROFITS, LOSS OF REPUTATION, EMOTIONAL DISTRESS, DEVICE CORRUPTION, OR BROWSER MALFUNCTION, ARISING OUT OF OR IN CONNECTION WITH YOUR USE OR INABILITY TO USE THE APPLICATION, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+      </p>
+
+      <h2 class="section-heading">10. Modifications to These Terms</h2>
+      <p>
+        The developer reserves the right to revise, amend, or update these Terms of Use at any time. Any updated terms will be published directly within the public GitHub repository and made accessible via this document. Your continued use of Manifest Journal following the publication of revised terms constitutes your binding acceptance of the updated Terms of Use.
+      </p>
+
+      <h2 class="section-heading">11. Governing Law and Jurisdiction</h2>
+      <p>
+        These Terms of Use, along with any dispute, controversy, or claim arising out of or relating to the application, shall be governed by, construed, and enforced in accordance with the laws of the State of Maharashtra, India, without regard to its conflict of law principles. Any legal action or proceeding arising under these Terms shall be instituted exclusively in the competent courts located in Maharashtra, India.
+      </p>
+
+      <h2 class="section-heading">12. Contact Information</h2>
+      <p>
+        If you have any questions or require formal communication regarding these Terms of Use, please reach out to developer Anshul Sethiya via email at <a href="mailto:anshuljain1189@gmail.com">anshuljain1189@gmail.com</a>, or open an issue on GitHub at <a href="https://github.com/anshulsethiya7200-stack/Manifest-Journal/issues" target="_blank" rel="noopener noreferrer">https://github.com/anshulsethiya7200-stack/Manifest-Journal/issues</a>.
+      </p>
+    </section>
+
+    <hr class="document-divider">
+
+    <!-- =================================================================== -->
+    <!-- DOCUMENT 3 — SECURITY POLICY                                        -->
+    <!-- =================================================================== -->
+    <section id="security" class="document-section" aria-labelledby="security-heading">
+      <div class="doc-header">
+        <h1 id="security-heading" class="doc-title">Security Policy</h1>
+        <p class="doc-meta">Effective Date: TBD — fill before publishing &nbsp;|&nbsp; Last Updated: TBD — fill before publishing</p>
+      </div>
+
+      <h2 class="section-heading">1. Supported Versions</h2>
+      <p>
+        Security audits, vulnerability triage, and maintenance patches are actively provided solely for the latest published release and current <code>main</code> branch of the Manifest Journal codebase hosted in the official GitHub repository. Because Progressive Web Apps update automatically via Service Worker asset lifecycle management, users are encouraged to stay connected briefly to allow automatic cache updating to the latest secure version.
+      </p>
+
+      <h2 class="section-heading">2. Security Architecture — Why This App Is Structurally Secure</h2>
+      <p>
+        Manifest Journal eliminates the vast majority of traditional web vulnerability classes through intentional architectural choices:
+      </p>
+      <ul>
+        <li><strong>Zero Server Surface:</strong> Because there is no backend web server, database cluster, microservice API, or cloud storage container, traditional remote server breaches, SQL injection attacks, remote code execution (RCE) on servers, and database leaks are structurally impossible.</li>
+        <li><strong>No Authentication Credentials:</strong> The application does not require usernames, passwords, session tokens, or JWTs. There are no authentication credentials stored on any machine to intercept, brute-force, or compromise.</li>
+        <li><strong>Origin Sandboxing:</strong> All structured data stored in IndexedDB and binary media written to the Origin Private File System (OPFS) are strictly sandboxed by browser security kernels to the application's unique origin. Other websites, scripts from other tabs, and external applications cannot read or tamper with your records.</li>
+        <li><strong>Safe DOM Rendering & Input Sanitization:</strong> User-authored text across journal moments, scripts, and goal titles is handled securely and sanitized prior to persistence. Raw strings are never evaluated using dangerous APIs such as <code>eval()</code> or insecure innerHTML assignments.</li>
+        <li><strong>Transport Security (HTTPS Enforcement):</strong> Modern web browser engines mandate secure contexts (HTTPS) for all privileged web capabilities employed by this app, including Camera access, Microphone access, Service Workers, and OPFS filesystem access.</li>
+      </ul>
+
+      <h2 class="section-heading">3. Content Security Policy (CSP)</h2>
+      <p>
+        To prevent unauthorized script execution and defend against Cross-Site Scripting (XSS) vectors, Manifest Journal operates under a strict Content Security Policy. The enforced policy directives are defined as follows:
+      </p>
+      <div class="code-block">default-src 'self';
+script-src 'self';
+style-src 'self' https://fonts.googleapis.com;
+font-src https://fonts.gstatic.com;
+img-src 'self' blob: data:;
+media-src 'self' blob:;
+connect-src 'none';</div>
+      <p>
+        Under this policy, executable JavaScript is restricted strictly to first-party application bundles. External stylesheet loading is restricted to self and Google Fonts, font binaries are restricted to Google's static CDN, and outbound asynchronous network connections (such as <code>fetch</code> or <code>XMLHttpRequest</code>) are blocked (<code>connect-src 'none'</code>), guaranteeing that client scripts cannot exfiltrate data to remote endpoints.
+      </p>
+
+      <h2 class="section-heading">4. User Security Responsibilities</h2>
+      <p>
+        Because security in a local-first application is anchored directly in the user's physical client environment, you are advised to observe the following essential security practices:
+      </p>
+      <ul>
+        <li>Maintain a strong device passcode, PIN, or biometric screen lock to prevent physical inspection of your browser by unauthorized individuals.</li>
+        <li>Store exported <code>.zip</code> archive backups in secure, encrypted locations (such as encrypted drives or secure storage volumes).</li>
+        <li>Keep your web browser and operating system regularly updated to ensure you possess the latest security patches against sandbox escapes.</li>
+        <li>If using a shared family or public device, utilize private browsing windows or perform <em>Settings &rarr; Clear All Data</em> before concluding your session.</li>
+      </ul>
+
+      <h2 class="section-heading">5. Known Security Limitations</h2>
+      <p>
+        For complete transparency, users should understand the inherent boundary limitations of client-side browser storage:
+      </p>
+      <ul>
+        <li><strong>Physical Device Access:</strong> Anyone who has unlocked physical access to your device browser can launch Manifest Journal and view your local journals, goals, and media.</li>
+        <li><strong>Unencrypted Export Archives:</strong> Backups downloaded via the export tool are unencrypted ZIP containers. They should be treated with the same confidentiality as a physical notebook.</li>
+        <li><strong>Browser Eviction Under Storage Pressure:</strong> On devices experiencing extreme physical storage exhaustion, browser operating systems can theoretically evict origin storage data if not flagged as persistent. Users should maintain regular exported backup archives to prevent data loss.</li>
+      </ul>
+
+      <h2 class="section-heading">6. Reporting a Vulnerability</h2>
+      <p>
+        We treat the security and privacy integrity of Manifest Journal with utmost seriousness. If you identify a security flaw, sandbox leakage, or policy bypass within the application, <strong>please DO NOT open a public GitHub issue or public discussion thread</strong>.
+      </p>
+      <p>
+        Instead, report the issue privately by sending an encrypted or direct email to developer Anshul Sethiya at <a href="mailto:anshuljain1189@gmail.com">anshuljain1189@gmail.com</a> with the exact subject line:
+      </p>
+      <div class="code-block">[SECURITY] Manifest Journal — &lt;Brief Description of Vulnerability&gt;</div>
+      <p>
+        Please include in your report:
+      </p>
+      <ul>
+        <li>A detailed description of the vulnerability and its potential security impact.</li>
+        <li>Step-by-step instructions or proof-of-concept steps demonstrating how to reproduce the issue.</li>
+        <li>The specific browser vendor, version, and operating system where the vulnerability was observed.</li>
+        <li>Any remediation proposals, patch diffs, or defensive recommendations you may have.</li>
+      </ul>
+      <p>
+        You will receive an initial response acknowledging your submission within 72 hours. If confirmed, a remediation patch will be prioritized immediately, and you will be credited in the repository release notes upon release (unless you request anonymity).
+      </p>
+
+      <h2 class="section-heading">7. Coordinated Disclosure Policy</h2>
+      <p>
+        We adhere strictly to coordinated, responsible vulnerability disclosure principles:
+      </p>
+      <ol>
+        <li>The security researcher notifies the developer privately via email.</li>
+        <li>The developer acknowledges receipt within 72 hours, verifies the reported issue, and develops a remediation patch.</li>
+        <li>A verified patch is released to the main repository and deployed live to production.</li>
+        <li>Public disclosure or advisory publication takes place only after the fix has been verified live in production, or 90 days after initial report submission, whichever comes first.</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <!-- Self-Contained Accessible Tab Navigation Script -->
+  <script>
+    (function() {
+      const tabs = document.querySelectorAll('.tab-btn');
+      const sections = ['privacy', 'terms', 'security'].map(id => document.getElementById(id));
+
+      function updateActiveTab() {
+        const scrollPosition = window.scrollY + 120;
+        let currentSectionId = 'privacy';
+
+        sections.forEach(section => {
+          if (section && section.offsetTop <= scrollPosition) {
+            currentSectionId = section.getAttribute('id');
+          }
+        });
+
+        tabs.forEach(tab => {
+          const controls = tab.getAttribute('aria-controls');
+          if (controls === currentSectionId) {
+            tab.setAttribute('aria-current', 'true');
+          } else {
+            tab.removeAttribute('aria-current');
+          }
+        });
+      }
+
+      window.addEventListener('scroll', updateActiveTab, { passive: true });
+      updateActiveTab();
+    })();
+  </script>
+
+  <!-- Legal Footer -->
+  <footer class="legal-footer">
+    <p>© 2026 Anshul Sethiya · MIT License · <a href="https://github.com/anshulsethiya7200-stack/Manifest-Journal" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+  </footer>
+
+</body>
+</html>

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import {
-  BookOpen,
   Sparkles,
-  ExternalLink,
   ChevronDown,
   ChevronUp,
   Brain,
@@ -11,45 +9,6 @@ import {
   CheckCircle,
   Compass,
 } from 'lucide-react';
-
-interface VideoCard {
-  title: string;
-  channelName: string;
-  url: string;
-  thumbnailId: string;
-  duration: string;
-}
-
-const YOUTUBE_VIDEOS: VideoCard[] = [
-  {
-    title: 'Sadhguru — How to Manifest What You Really Want',
-    channelName: 'Sadhguru',
-    url: 'https://youtu.be/UwGSgJytufY?si=4-SrGXvKolk_NSA8',
-    thumbnailId: 'sadhguru-manifest',
-    duration: '16 min',
-  },
-  {
-    title: "The Shikshit Talks — 369 Manifestation Technique (Tesla's Secret)",
-    channelName: 'The Shikshit Talks',
-    url: 'https://youtu.be/PA3jBllt7RQ?si=ntmAmvsIGexlfh9n',
-    thumbnailId: 'the-shikshit-talks-369',
-    duration: '14 min',
-  },
-  {
-    title: 'Thinkspy — The Secret of Manifestation Explained (Law of Attraction)',
-    channelName: 'Thinkspy',
-    url: 'https://youtu.be/zvKlXfWQ2b8?si=X_wMXCK1pCisJT-Q',
-    thumbnailId: 'thinkspy-manifest',
-    duration: '24 min',
-  },
-  {
-    title: 'Cyber Zeel — Manifestation Technique in Hanuman Chalisa',
-    channelName: 'Cyber Zeel',
-    url: 'https://youtu.be/SQYHgnLKnLg?si=5lC8W453Ls4WXs6N',
-    thumbnailId: 'cyber-zeel-hanuman-chalisa',
-    duration: '18 min',
-  },
-];
 
 interface KnowledgeScreenProps {
   onOpenGuide?: () => void;
@@ -169,50 +128,6 @@ Rule 4: Relentless Micro-Action. Pair your spiritual alignment with daily discip
             </div>
           );
         })}
-      </div>
-
-      {/* Curated YouTube Video Cards */}
-      <div className="space-y-3 pt-2">
-        <div className="flex items-center justify-between">
-          <h3 className="font-bold text-base text-[#1b1b1c] dark:text-white flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-accent" />
-            <span>Curated Teachings</span>
-          </h3>
-          <span className="text-[11px] text-slate-600 dark:text-slate-300">External Links</span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {YOUTUBE_VIDEOS.map((vid, i) => (
-            <a
-              key={i}
-              href={vid.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white dark:bg-black p-4 rounded-3xl border border-black/5 dark:border-white/15 shadow-xs hover:border-accent-subtle transition group flex flex-col justify-between"
-            >
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <h4 className="font-bold text-xs text-[#1b1b1c] dark:text-white group-hover:text-accent transition line-clamp-2">
-                    {vid.title}
-                  </h4>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1">
-                    {vid.channelName}
-                  </p>
-                </div>
-                <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-accent shrink-0" />
-              </div>
-
-              <div className="mt-3 flex items-center justify-between text-[10px] text-slate-600 dark:text-slate-300">
-                <span className="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 font-medium">
-                  {vid.duration}
-                </span>
-                <span className="text-accent font-semibold">
-                  Watch on YouTube →
-                </span>
-              </div>
-            </a>
-          ))}
-        </div>
       </div>
     </div>
   );

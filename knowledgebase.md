@@ -98,12 +98,8 @@ Zero backend, zero authentication, zero server. 100% of user data lives in the u
    - Current spoken word highlighting with glowing golden badge.
    - MediaRecorder recording saved directly to OPFS / Album.
 8. **Knowledge Screen (`/#knowledge`)**:
-   - Principles of manifestation, subconscious reprogramming, the 3-6-9 Nikola Tesla method, rules of alignment.
-   - Curated video cards linking out to high-impact manifestation teachings with creator names:
-     1. Sadhguru — How to Manifest What You Really Want (`https://youtu.be/UwGSgJytufY?si=4-SrGXvKolk_NSA8`)
-     2. The Shikshit Talks — 369 Manifestation Technique (Tesla's Secret) (`https://youtu.be/PA3jBllt7RQ?si=ntmAmvsIGexlfh9n`)
-     3. Thinkspy — The Secret of Manifestation Explained (Law of Attraction) (`https://youtu.be/zvKlXfWQ2b8?si=X_wMXCK1pCisJT-Q`)
-     4. Cyber Zeel — Manifestation Technique in Hanuman Chalisa (`https://youtu.be/SQYHgnLKnLg?si=5lC8W453Ls4WXs6N`)
+   - Principles of manifestation, subconscious reprogramming, the 3-6-9 Nikola Tesla method, rules of conscious alignment.
+   - 100% offline text-based teachings — all external YouTube links and video options have been completely removed.
 9. **Settings Screen (`/#settings`)**:
    - Theme toggle (Light, Dark, System).
    - Accent color palette selector (Material You tonal variants).
@@ -111,12 +107,15 @@ Zero backend, zero authentication, zero server. 100% of user data lives in the u
    - Storage quota usage monitor.
    - Client-side full data export to ZIP (JSON + binary media).
    - Notification permissions & reminders.
+   - Privacy, Terms of Use & Security Policy link (`/policy.html`).
    - Clear all data with safety confirmation.
    - Community links: GitHub repository (`https://github.com/anshulsethiya7200-stack/Manifest-Journal`) & Buy Me a Coffee (`https://buymeacoffee.com/anshuljain`).
 10. **Navigation & Interactive Guide**:
     - Fixed bottom tab bar (Scripting, Journal, Album, Teleprompter).
     - Top App Bar with hamburger drawer (Home, Goals, Knowledge, Commitment, Settings).
     - **Interactive User Guide (`InteractiveUserGuide`)**: Animated step-by-step onboarding walkthrough accessible from the navigation Drawer and Knowledge screen covering core philosophy, covenant sealing, multi-horizon goals, 3-6-9 scripting, spoken teleprompter, and sacred frequencies.
+11. **Legal & Security Policies (`/policy.html`)**:
+    - Self-contained Material Design 3 HTML policy document covering Privacy Policy (13 comprehensive sections), Terms of Use (12 comprehensive sections), and Security Policy (7 comprehensive sections). Zero-server, local-first guarantee by Anshul Sethiya under MIT License.
 
 ---
 
@@ -129,7 +128,7 @@ Zero backend, zero authentication, zero server. 100% of user data lives in the u
   - Graceful fallback to binary blob storage and in-memory stores if OPFS is restricted or quota is exhausted.
   - Corrupted record quarantine and schema healing on read recovery.
 - **Content Security Policy & Permissions-Policy (`index.html`)**:
-  - Production CSP meta tag restricting unauthorized script sources, preventing inline unsafe evaluation where possible, and limiting external resource embedding strictly to trusted local media blobs and YouTube video links.
+  - Production CSP meta tag restricting unauthorized script sources (`script-src 'self'`), restricting styles to self and Google Fonts, blocking outbound connections (`connect-src 'self' ...`), and disabling external frame embedding (`frame-src 'none'`).
   - Explicit `Permissions-Policy: camera=(self), microphone=(self), display-capture=(self)` allowing hardware hooks strictly as needed.
 - **Secure Client-Side ZIP Export**:
   - In-memory JSZip packaging (`manifest-journal-export-YYYY-MM-DD.zip`) ensuring local JSON records and OPFS binary blobs are bundled without temporary unencrypted cache leaks.

@@ -472,6 +472,26 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </a>
       </div>
 
+      {/* Legal & Policy Links */}
+      <div className="pt-1">
+        <a
+          href="/policy.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-white dark:bg-black p-4 rounded-3xl border border-black/10 dark:border-white/15 shadow-2xs hover:border-accent-subtle hover:shadow-xs transition-all active:scale-95 flex items-center gap-3 text-xs font-semibold text-slate-700 dark:text-slate-200 group"
+          aria-label="Privacy Policy, Terms of Use, and Security Policy"
+        >
+          <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-zinc-900 flex items-center justify-center group-hover:scale-105 transition-transform text-accent shrink-0">
+            <ShieldCheck className="w-4 h-4 text-accent" />
+          </div>
+          <div className="flex flex-col text-left">
+            <span className="font-bold text-xs text-slate-900 dark:text-white">Privacy, Terms & Security Policy</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-normal">100% on-device local storage guarantees & MIT license</span>
+          </div>
+          <ExternalLink className="w-3.5 h-3.5 text-slate-400 ml-auto group-hover:text-accent transition-colors shrink-0" />
+        </a>
+      </div>
+
       {/* Clear All Data Danger Zone */}
       <div className="pt-2">
         <button
