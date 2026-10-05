@@ -33,7 +33,7 @@ Zero backend, zero authentication, zero server. 100% of user data lives in the u
     - All action buttons (`.bg-accent`, `.hover-bg-accent`, `.btn-accent`) uniformly inherit the user's sacred accent frequency.
   - **Scripting Notebook Clean Aesthetic**:
     - Clean ruled paper aesthetic with pure horizontal ruled lines (`#e5e7eb` in light mode, `rgba(255, 255, 255, 0.18)` in dark mode) without any red vertical margin line.
-    - Writing starts directly from the top left corner of the scripting page just above the ruled line (elevated ~10px above previous placement for baseline alignment).
+    - Writing starts directly from the top left corner of the scripting page with natural baseline alignment (`paddingTop: '7px'`, `lineHeight: '32px'`), resting comfortably just above each ruled line with natural handwriting aesthetics.
     - In dark mode, textarea text is forced to pure white (`#ffffff` and `-webkit-text-fill-color: #ffffff`) with high-visibility placeholder (`rgba(255, 255, 255, 0.5)`) and matching sacred accent caret and text selection.
   - **Dark Mode Responsive Gradients**:
     - `.hero-gradient`, `.streak-gradient`, `.card-gradient`, and `.pwa-banner-gradient` dynamically transform in dark mode into obsidian/slate deep gradients (`#181b22` to `#121418`) accented with subtle sacred frequency glows.

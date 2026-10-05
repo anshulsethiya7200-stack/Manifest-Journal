@@ -153,7 +153,7 @@ export const ScriptingScreen: React.FC<ScriptingScreenProps> = ({ initialState, 
             onChange={(e) => handleContentChange(e.target.value)}
             placeholder="Write your reality into being as if it has already occurred in the present moment..."
             className="w-full h-full min-h-[340px] bg-transparent resize-none border-none outline-hidden text-slate-900 dark:text-white dark:placeholder:text-slate-400 font-medium text-base leading-[32px] tracking-wide p-0 m-0"
-            style={{ lineHeight: '32px', marginTop: '-5px' }}
+            style={{ lineHeight: '32px', paddingTop: '7px' }}
           />
         </div>
 
