@@ -1,6 +1,10 @@
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import { initRuntimeProtections } from './security/runtime-guard.js';
+
+// Initialize security protections before rendering
+initRuntimeProtections();
 
 // Register Service Worker for offline capability & notifications
 if ('serviceWorker' in navigator) {

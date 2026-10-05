@@ -120,27 +120,19 @@ Zero backend, zero authentication, zero server. 100% of user data lives in the u
 
 ---
 
-## Client-Side Security & Data Protection Architecture
-- **Strict Input Sanitization & XSS Defense (`src/lib/sanitize.ts`)**:
-  - DOMPurify integration sanitizing all user-generated fields (pledge text, quit clause, scripting notebook pages, journal reflections, teleprompter scripts, and goal titles) before writing to IndexedDB.
-  - Strips executable HTML/script vectors and validates data schema types to prevent stored XSS attacks.
-- **Storage Resilience & OPFS Boundaries (`src/lib/storage.ts`, `src/lib/opfs.ts`)**:
-  - All IndexedDB transactions and OPFS reads/writes are wrapped in resilient try/catch error boundaries.
-  - Graceful fallback to binary blob storage and in-memory stores if OPFS is restricted or quota is exhausted.
-  - Corrupted record quarantine and schema healing on read recovery.
-- **Content Security Policy & Permissions-Policy (`index.html`)**:
-  - Production CSP meta tag restricting unauthorized script sources (`script-src 'self'`), restricting styles to self and Google Fonts, blocking outbound connections (`connect-src 'self' ...`), and disabling external frame embedding (`frame-src 'none'`).
-  - Explicit `Permissions-Policy: camera=(self), microphone=(self), display-capture=(self)` allowing hardware hooks strictly as needed.
-- **Secure Client-Side ZIP Export**:
-  - In-memory JSZip packaging (`manifest-journal-export-YYYY-MM-DD.zip`) ensuring local JSON records and OPFS binary blobs are bundled without temporary unencrypted cache leaks.
-- **Media Stream Lifecycle Cleanup**:
-  - Strict `mediaStream.getTracks().forEach(track => track.stop())` lifecycle cleanup across selfie camera, album camera, and teleprompter recording upon modal exit or component unmount.
-- **Appearance Mode & Sacred Accent Alignment**:
-  - Pure Obsidian Black Appearance Mode (`dark:bg-black`, `#000000`) for app background, containers, cards, and navigation.
-  - All primary buttons, hero text, and icons dynamically adopt the chosen Sacred Accent Color.
-  - Storage monitor label explicitly updated to "Storage Used/Available".
-  - Onboarding "Who Are You" screen features two distinct explicit buttons: "Take a selfie" and "Upload profile picture".
-  - Teleprompter overlay positioned directly at the top of the viewport immediately adjacent to the front camera lens with compact eye-level indicator, elevated text container, and buttery-smooth 0.5x reading pace.
+## Client-Side Security & Data Protection Architecture (12-Layer Defense-in-Depth)
+- **Layer 1 — HTTP Security Headers & Permissions-Policy**: Strict CSP (`default-src 'self'; script-src 'self'; connect-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests;`), `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`, and comprehensive `Permissions-Policy`. Mirroring deployment headers in `_headers`.
+- **Layer 2 — Input Sanitization (`src/security/sanitize.js`)**: Non-regex DOMParser HTML tag stripping, null byte removal, strict maxLength bounds checking (throws RangeError), path separator removal for OPFS filenames, strict `http:`/`https:` URL protocol whitelist, and image data URL type/size enforcement.
+- **Layer 3 — Safe DOM Rendering (`src/security/dom.js`)**: Safe text setting (`setText`), tree-walking HTML sanitizer (`setHtml`) stripping blocked tags (`script`, `iframe`, `object`, `embed`, etc.) and `on*`/`javascript:` attributes, and programmatic element construction (`createEl`) with URL validation.
+- **Layer 4 — IndexedDB Integrity & Quarantine (`src/security/db-guard.js`)**: Schema validators (`validateGoal`, `validateJournalEntry`, `validateScriptPage`, `validateProfile`, `validateAlbumMedia`) and startup boot integrity check (`runIntegrityCheck`) automatically quarantining corrupted records into a dedicated `quarantine` store.
+- **Layer 5 — OPFS File Security (`src/security/opfs-guard.js`)**: Magic bytes signature verification (JPEG, PNG, WebP), file size limits (10MB image, 500MB video), safe wrappers (`safeWriteToOPFS`, `safeReadFromOPFS`, `safeDeleteFromOPFS`), and quota threshold monitoring (`getOPFSQuota`).
+- **Layer 6 — Camera and Media Security (`src/security/media-guard.js`)**: Role-based constraint requests, automated fallback for overconstrained devices, tracking active streams in `activeCameraStreams` Set, canvas memory zeroing upon photo capture, and automatic stream teardown on visibility change (`hidden`), pagehide, and beforeunload.
+- **Layer 7 — Service Worker Security (`sw.js`)**: Parallel SHA-256 cache integrity tracking in `manifest-journal-integrity`, boot-time `verifyCache()`, MIME-type verification before caching, origin whitelisting, message structure/origin validation, and fixed notification templates with character caps.
+- **Layer 8 — Data Export Security (`src/security/export-guard.js`)**: Prototype pollution sanitization (`__proto__`, `constructor`, `prototype`), circular reference detection via WeakSet, SHA-256 archive checksum generation, and manifest verification.
+- **Layer 9 — Runtime Protection (`src/security/runtime-guard.js`)**: Global references pinning (`_fetch`, `_JSON_parse`, `_JSON_stringify`), devtools tampering detection, anti-clickjacking guards, error handler path masking, and storage monitoring.
+- **Layer 10 — Signature Pad Security**: Canvas bounding (800x300px), PNG data URL type/size validation (under 2MB), immediate canvas clearing upon submission, and scoped lifecycle management.
+- **Layer 11 — Dependency Security (`security/subresource-integrity.md`)**: Subresource integrity specification and crossorigin configuration for all external assets.
+- **Layer 12 — Secure Hash Routing (`src/security/router-guard.js`)**: Whitelist route matching (`ALLOWED_ROUTES`), sanitization of hash fragments, and fallback to `'home'`.
 
 ---
 
