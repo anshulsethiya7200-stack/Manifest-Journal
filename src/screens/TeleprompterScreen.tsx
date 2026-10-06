@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { TeleprompterScript, AlbumMedia } from '../types';
 import { saveTeleprompterScript, saveAlbumMedia } from '../lib/storage';
 import { saveMediaFile } from '../lib/opfs';
@@ -12,6 +12,8 @@ import {
   Sparkles,
   ArrowRight,
   BookOpen,
+  X,
+  Clock,
 } from 'lucide-react';
 
 interface TeleprompterScreenProps {
@@ -21,19 +23,24 @@ interface TeleprompterScreenProps {
 
 const PRESET_SCRIPTS = [
   {
+    title: 'Camera Presence & Natural Flow',
+    content:
+      'Every video starts with a clear idea.\nTake a breath.\nLook into the lens.\nSpeak naturally.\nMake it count.',
+  },
+  {
     title: 'Abundance & Financial Flow',
     content:
-      'I am a clear conduit for limitless abundance and prosperity. Wealth flows toward me in avalanches of ease and synchronicity. Every dollar I invest in my growth returns tenfold. I anchor financial sovereignty with profound gratitude and generous grace.',
+      'I am a clear conduit for limitless abundance and prosperity.\nWealth flows toward me in avalanches of ease and synchronicity.\nEvery dollar I invest in my growth returns tenfold.\nI anchor financial sovereignty with profound gratitude and generous grace.',
   },
   {
     title: 'Self-Certainty & Sacred Purpose',
     content:
-      'I completely trust my intuition, my timing, and my highest alignment. I release all need for external validation. The universe is actively conspiring in my favor. Every door that opens for me is aligned with my greatest creative contribution.',
+      'I completely trust my intuition, my timing, and my highest alignment.\nI release all need for external validation.\nThe universe is actively conspiring in my favor.\nEvery door that opens for me is aligned with my greatest creative contribution.',
   },
   {
     title: 'Quantum Physical Vitality',
     content:
-      'My mind is tranquil, my body is resilient, and my energy is radiant. Deep peace permeates every cell of my being. I awaken with vibrant enthusiasm, moving through challenges with unshakeable poise and clear conviction.',
+      'My mind is tranquil, my body is resilient, and my energy is radiant.\nDeep peace permeates every cell of my being.\nI awaken with vibrant enthusiasm, moving through challenges with unshakeable poise and clear conviction.',
   },
 ];
 
@@ -42,13 +49,15 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
   onNavigateToAlbum,
 }) => {
   const [mode, setMode] = useState<'setup' | 'recording'>('setup');
-  const [scriptTitle, setScriptTitle] = useState('');
-  const [scriptText, setScriptText] = useState('');
-  const [speed, setSpeed] = useState(1.0); // 0.5 to 3.0
+  const [scriptTitle, setScriptTitle] = useState(PRESET_SCRIPTS[0].title);
+  const [scriptText, setScriptText] = useState(PRESET_SCRIPTS[0].content);
+  // Human speaking pace multiplier: 1.0x = 120 Words Per Minute (Average human reading speed)
+  const [speed, setSpeed] = useState(1.0);
 
   // Teleprompter Recording State
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [recordingSeconds, setRecordingSeconds] = useState(0);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
   // Refs for media and animation
@@ -61,7 +70,49 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
   const scrollPosRef = useRef(0);
   const wordsRef = useRef<string[]>([]);
 
-  wordsRef.current = scriptText.trim().split(/\s+/);
+  // Parse script into clean, readable structured lines
+  const lines = useMemo(() => {
+    if (!scriptText.trim()) return [];
+    const rawSegments = scriptText.includes('\n')
+      ? scriptText.split('\n').filter((l) => l.trim().length > 0)
+      : scriptText.match(/[^.!?]+[.!?]+|[^.!?]+$/g)?.map((s) => s.trim()) || [scriptText.trim()];
+
+    let currentWordCounter = 0;
+    return rawSegments.map((segment) => {
+      const words = segment.trim().split(/\s+/).filter(Boolean);
+      const startIndex = currentWordCounter;
+      currentWordCounter += words.length;
+      return {
+        text: segment.trim(),
+        words,
+        startIndex,
+        endIndex: Math.max(startIndex, currentWordCounter - 1),
+      };
+    });
+  }, [scriptText]);
+
+  const allWords = useMemo(() => {
+    return lines.flatMap((l) => l.words);
+  }, [lines]);
+
+  wordsRef.current = allWords;
+
+  // Live recording timer (MM:SS)
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+    if (isRecording && !isPaused) {
+      interval = setInterval(() => {
+        setRecordingSeconds((prev) => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isRecording, isPaused]);
+
+  const formatTimer = (totalSec: number) => {
+    const mins = Math.floor(totalSec / 60);
+    const secs = totalSec % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
 
   // Clean stream on unmount
   useEffect(() => {
@@ -85,6 +136,9 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
       });
       streamRef.current = null;
     }
+    setIsRecording(false);
+    setIsPaused(false);
+    setRecordingSeconds(0);
   };
 
   // Launch Teleprompter Mode
@@ -104,6 +158,7 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
       setMode('recording');
       setIsRecording(false);
       setIsPaused(false);
+      setRecordingSeconds(0);
       scrollPosRef.current = 0;
       setCurrentWordIndex(0);
 
@@ -165,33 +220,52 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
     recorder.start();
     setIsRecording(true);
     setIsPaused(false);
+    setRecordingSeconds(0);
+    scrollPosRef.current = 0;
+    setCurrentWordIndex(0);
 
-    // Start RAF scroll
+    // Start natural human reading scroll loop
     startScrollLoop();
   };
 
   const startScrollLoop = () => {
     let lastTime = performance.now();
+    let accumulatedTime = 0;
+    const initialBreathDelay = 1.0; // 1s calm pause to settle gaze on camera
+
+    // Average human speech rate: 120 Words Per Minute at 1.0x
+    const targetWPM = Math.max(60, Math.min(220, Math.round(120 * speed)));
+    const wordsPerSec = targetWPM / 60;
+    const secondsPerWord = 1 / wordsPerSec;
 
     const loop = (time: number) => {
       const delta = (time - lastTime) / 1000;
       lastTime = time;
 
       if (!isPaused && scrollContainerRef.current) {
-        // Recalibrated auto-scrolling speed calculation algorithm:
-        // At lowest setting (0.5x), provides a buttery-smooth, comfortably slow, and easily readable pace (~8.5 px/sec) without rushing the speaker.
-        const basePixelsPerSec = 9.5;
-        const speedMultiplier = Math.pow(speed / 0.5, 1.25);
-        const pixelsToScroll = basePixelsPerSec * speedMultiplier * delta;
-        scrollPosRef.current += pixelsToScroll;
-        scrollContainerRef.current.scrollTop = scrollPosRef.current;
+        accumulatedTime += delta;
 
-        // Calculate highlighted word index based on scroll position
-        const totalHeight = scrollContainerRef.current.scrollHeight - scrollContainerRef.current.clientHeight;
-        if (totalHeight > 0) {
-          const ratio = Math.min(1, Math.max(0, scrollPosRef.current / totalHeight));
-          const idx = Math.floor(ratio * wordsRef.current.length);
-          setCurrentWordIndex(idx);
+        const effectiveTime = Math.max(0, accumulatedTime - initialBreathDelay);
+        const wordCount = wordsRef.current.length || 1;
+        const totalReadingDuration = wordCount * secondsPerWord;
+
+        // Current word index advances in sync with natural human speaking speed
+        const activeIdx = Math.min(
+          wordCount - 1,
+          Math.floor(effectiveTime * wordsPerSec)
+        );
+        setCurrentWordIndex(activeIdx);
+
+        // Smooth continuous scroll proportional to total speech duration
+        const maxScroll =
+          scrollContainerRef.current.scrollHeight - scrollContainerRef.current.clientHeight;
+
+        if (maxScroll > 0) {
+          const progress = Math.min(1, effectiveTime / totalReadingDuration);
+          const targetScroll = progress * maxScroll;
+          // Smooth glide toward target scroll
+          scrollPosRef.current += (targetScroll - scrollPosRef.current) * 0.12;
+          scrollContainerRef.current.scrollTop = scrollPosRef.current;
         }
       }
 
@@ -231,14 +305,14 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
               <Tv className="w-6 h-6 text-accent" />
               <span>Spoken Teleprompter</span>
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Read your affirmations aloud on camera. Speak with certainty to rewire subconscious beliefs.
+            <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
+              Read affirmations aloud directly on camera. Speak with certainty and natural pacing to rewire subconscious belief.
             </p>
           </div>
 
           {/* Preset Buttons */}
           <div className="space-y-2">
-            <span className="text-xs font-bold text-slate-600 dark:text-slate-300 flex items-center gap-1.5">
+            <span className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               <span>Select Preset Affirmation:</span>
             </span>
@@ -281,7 +355,7 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
               <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center justify-between">
                 <span>Affirmation Text</span>
                 <span className="text-[10px] text-slate-400">
-                  {wordsRef.current.length} words
+                  {allWords.length} words • ~{Math.max(1, Math.ceil((allWords.length / Math.round(120 * speed)) * 60))}s speaking time
                 </span>
               </label>
               <textarea
@@ -292,30 +366,30 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
               />
             </div>
 
-            {/* Speed Controller */}
-            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-white/10">
+            {/* Natural Speed Controller */}
+            <div className="space-y-2.5 pt-3 border-t border-slate-100 dark:border-white/10">
               <div className="flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300">
                 <span className="flex items-center gap-1.5">
                   <Sliders className="w-3.5 h-3.5 text-accent" />
-                  <span>Scroll Speed</span>
+                  <span>Reading Speed</span>
                 </span>
-                <span className="font-mono bg-accent-container text-accent px-2 py-0.5 rounded-full text-[11px] font-bold">
-                  {speed.toFixed(1)}x
+                <span className="font-mono bg-accent-container text-accent px-2.5 py-0.5 rounded-full text-[11px] font-bold">
+                  {Math.round(120 * speed)} Words / Min ({speed.toFixed(1)}x)
                 </span>
               </div>
               <input
                 type="range"
                 min="0.5"
-                max="3.0"
-                step="0.1"
+                max="1.8"
+                step="0.05"
                 value={speed}
                 onChange={(e) => setSpeed(parseFloat(e.target.value))}
                 className="w-full accent-[var(--accent-color,#0b57d0)]"
               />
               <div className="flex justify-between text-[10px] text-slate-400">
-                <span>Gentle / Reflective (0.5x)</span>
-                <span>Natural Cadence (1.0x)</span>
-                <span>Fast Pace (3.0x)</span>
+                <span>Reflective (60 WPM)</span>
+                <span className="text-accent font-semibold">Natural Human (120 WPM)</span>
+                <span>Brisk Pace (216 WPM)</span>
               </div>
             </div>
           </div>
@@ -330,7 +404,7 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
           </button>
         </div>
       ) : (
-        /* RECORDING / OVERLAY MODE: Repositioned to absolute top of viewport adjacent to front camera area */
+        /* RECORDING / OVERLAY MODE: Styled like pro teleprompter matching reference */
         <div className="fixed inset-0 z-50 bg-black flex flex-col justify-between text-white overflow-hidden animate-in fade-in">
           {/* Video Feed Background */}
           <div className="absolute inset-0 z-0 overflow-hidden">
@@ -341,54 +415,97 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
               muted
               className="w-full h-full object-cover"
             />
-            {/* Contrast Scrim for Text Legibility: Stronger at top right beneath camera notch */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/40 to-black/85" />
+            {/* Contrast Scrim for Text Legibility */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/45 to-black/85" />
           </div>
 
-          {/* Top Bar with Camera Eye-Level Badge */}
-          <div className="relative z-20 flex items-center justify-between px-3 pt-1 pb-0.5">
-            <div className="flex items-center gap-1.5">
-              <span className="text-[10px] font-bold px-2 py-0.5 bg-black/80 rounded-full border border-white/20 backdrop-blur-md text-amber-300 flex items-center gap-1 shadow">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Camera Eye-Level</span>
-              </span>
-              <span className="text-[10px] font-semibold px-2 py-0.5 bg-black/60 rounded-full border border-white/15 backdrop-blur-xs text-white/90">
-                {speed.toFixed(1)}x pace
-              </span>
-            </div>
+          {/* Top Bar with Exit, Live Timer, and Cadence Badge */}
+          <div className="relative z-20 flex items-center justify-between px-4 pt-3 pb-1">
             <button
               onClick={finishRecording}
-              className="px-2.5 py-0.5 rounded-full bg-white/20 text-xs font-semibold hover:bg-white/30 backdrop-blur-xs active:scale-95 transition"
+              className="p-2 rounded-full bg-black/60 border border-white/20 text-white/90 hover:bg-black/80 active:scale-95 transition"
+              aria-label="Exit Teleprompter"
             >
-              Exit
+              <X className="w-4 h-4" />
             </button>
+
+            {/* Live Recording Timer */}
+            <div className="flex items-center gap-2 px-3.5 py-1 bg-black/80 rounded-full border border-white/20 backdrop-blur-md shadow-lg">
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  isRecording
+                    ? isPaused
+                      ? 'bg-amber-400'
+                      : 'bg-rose-500 animate-pulse'
+                    : 'bg-emerald-400'
+                }`}
+              />
+              <span className="font-mono text-xs font-bold text-white tracking-wider">
+                {isRecording ? formatTimer(recordingSeconds) : 'Ready'}
+              </span>
+            </div>
+
+            {/* Natural WPM Badge */}
+            <div className="text-[11px] font-bold px-3 py-1 bg-black/70 rounded-full border border-white/20 text-amber-300 backdrop-blur-md">
+              {Math.round(120 * speed)} WPM
+            </div>
           </div>
 
-          {/* Top-Pinned Scrolling Script Overlay: Shifted directly to top near front camera */}
-          <div className="relative z-20 w-full max-w-lg mx-auto px-2.5 pt-0">
+          {/* Top-Pinned Scrolling Script Overlay: Styled with vertical accent line and natural phrasing */}
+          <div className="relative z-20 w-full max-w-lg mx-auto px-4 pt-1">
             <div
               ref={scrollContainerRef}
-              className="h-[38vh] sm:h-[42vh] overflow-y-auto no-scrollbar rounded-2xl bg-black/65 backdrop-blur-md border border-white/15 px-3 pt-0 pb-3 text-center select-none shadow-2xl"
+              className="h-[44vh] sm:h-[48vh] overflow-y-auto no-scrollbar rounded-3xl bg-black/70 backdrop-blur-md border border-white/15 p-4 select-none shadow-2xl"
               style={{ scrollBehavior: 'auto' }}
             >
-              <div className="pt-0 pb-6 -mt-1">
-                <p className="text-xl sm:text-2xl font-bold leading-snug tracking-wide text-white/70 pt-0 mt-0">
-                  {wordsRef.current.map((word, idx) => {
-                    const isCurrent = idx === currentWordIndex;
-                    return (
-                      <span
-                        key={idx}
-                        className={`inline-block mx-1 transition-all duration-150 ${
-                          isCurrent
-                            ? 'text-amber-300 font-extrabold scale-110 drop-shadow-[0_0_14px_rgba(255,234,0,0.9)]'
-                            : 'text-white/85'
+              <div className="pt-2 pb-52 space-y-3">
+                {lines.map((line, lineIdx) => {
+                  const isLineActive =
+                    currentWordIndex >= line.startIndex && currentWordIndex <= line.endIndex;
+                  const isLinePast = currentWordIndex > line.endIndex;
+
+                  return (
+                    <div
+                      key={lineIdx}
+                      className={`transition-all duration-200 pl-3.5 py-1 border-l-2 text-left ${
+                        isLineActive
+                          ? 'border-accent bg-white/5 rounded-r-xl'
+                          : isLinePast
+                          ? 'border-white/10'
+                          : 'border-white/20'
+                      }`}
+                    >
+                      <p
+                        className={`text-xl sm:text-2xl leading-relaxed tracking-wide transition-all ${
+                          isLineActive
+                            ? 'text-white font-bold scale-[1.01]'
+                            : isLinePast
+                            ? 'text-white/40 font-medium'
+                            : 'text-white/70 font-semibold'
                         }`}
                       >
-                        {word}
-                      </span>
-                    );
-                  })}
-                </p>
+                        {line.words.map((word, wIdx) => {
+                          const wordGlobalIdx = line.startIndex + wIdx;
+                          const isWordCurrent = wordGlobalIdx === currentWordIndex;
+                          return (
+                            <span
+                              key={wIdx}
+                              className={`inline-block mr-1.5 transition-colors duration-100 ${
+                                isWordCurrent
+                                  ? 'text-amber-300 font-extrabold underline decoration-amber-400 decoration-2 underline-offset-4 drop-shadow-[0_0_8px_rgba(255,234,0,0.6)]'
+                                  : isLineActive
+                                  ? 'text-white'
+                                  : ''
+                              }`}
+                            >
+                              {word}
+                            </span>
+                          );
+                        })}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -428,3 +545,4 @@ export const TeleprompterScreen: React.FC<TeleprompterScreenProps> = ({
     </div>
   );
 };
+

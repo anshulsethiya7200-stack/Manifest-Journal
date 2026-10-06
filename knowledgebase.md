@@ -94,9 +94,11 @@ Zero backend, zero authentication, zero server. 100% of user data lives in the u
    - In-app Camera modal with photo capture (canvas frame) and video recording (MediaRecorder).
    - Full-screen media viewer dialog with download action (`<a download>`), Web Share, and deletion.
 7. **Teleprompter Screen (`/#teleprompter`)**:
-   - Script setup with scroll speed controller (0.5x - 3.0x) and preset affirmations.
-   - Live camera preview with overlaid auto-scrolling script driven by `requestAnimationFrame`.
-   - Current spoken word highlighting with glowing golden badge.
+   - Paced directly to natural human speaking speed (120 Words Per Minute default cadence, calibrated from 60 WPM reflective up to 216 WPM).
+   - Structured line-by-line reading layout with vertical accent guide bar, left alignment, and active phrase emphasis matching pro teleprompter standards.
+   - Initial 1.0s breath-and-settle pause before smooth auto-scrolling begins, allowing speakers to lock eye contact with the camera lens.
+   - Real-time recording elapsed timer (MM:SS) and dynamic WPM indicator badge.
+   - Preset collection including "Camera Presence & Natural Flow", "Abundance & Financial Flow", "Self-Certainty & Sacred Purpose", and "Quantum Physical Vitality".
    - MediaRecorder recording saved directly to OPFS / Album.
 8. **Knowledge Screen (`/#knowledge`)**:
    - Principles of manifestation, subconscious reprogramming, the 3-6-9 Nikola Tesla method, rules of conscious alignment.
