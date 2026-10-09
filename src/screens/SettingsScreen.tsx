@@ -4,6 +4,11 @@ import { getAppSettings, setSetting, clearAllDatabase, checkStorageQuota } from 
 import { exportAllDataToZip, clearAllMediaFiles } from '../lib/opfs';
 import { applyTheme, applyAccentColor, SACRED_ACCENT_COLORS } from '../lib/theme';
 import {
+  enableFirebaseNotifications,
+  triggerTestNotification,
+  getExistingFCMToken,
+} from '../lib/firebase';
+import {
   Sun,
   Moon,
   Laptop,
@@ -21,6 +26,9 @@ import {
   ShieldCheck,
   Sparkles,
   Sliders,
+  Copy,
+  Send,
+  RefreshCw,
 } from 'lucide-react';
 
 interface SettingsScreenProps {
@@ -42,6 +50,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   const [notificationsEnabled, setNotificationsEnabled] = useState(
     typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted'
   );
+  const [fcmToken, setFcmToken] = useState<string | null>(null);
+  const [fcmLoading, setFcmLoading] = useState(false);
+  const [fcmMessage, setFcmMessage] = useState<string | null>(null);
+  const [tokenCopied, setTokenCopied] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [customColor, setCustomColor] = useState(() => initialSettings?.accentColor || '#0b57d0');
 
@@ -52,6 +64,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
       setCustomColor(s.accentColor || '#0b57d0');
       const storage = await checkStorageQuota();
       setStorageInfo(storage);
+      const token = await getExistingFCMToken();
+      if (token) setFcmToken(token);
     })();
   }, []);
 
@@ -79,36 +93,47 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
     onSettingsChanged(updated);
   };
 
-  const handleToggleNotifications = async () => {
-    if (!('Notification' in window)) {
-      alert('Notifications are not supported in this browser.');
-      return;
-    }
-
-    if (Notification.permission === 'granted') {
-      alert('Daily reminders are active for 7:00 AM and 8:00 PM.');
-      setNotificationsEnabled(true);
-      return;
-    }
-
+  const handleEnableFirebaseNotifications = async () => {
+    setFcmLoading(true);
+    setFcmMessage('Requesting notification permissions & registering device...');
     try {
-      const perm = await Notification.requestPermission();
-      if (perm === 'granted') {
+      const res = await enableFirebaseNotifications();
+      if (res.success && res.token) {
+        setFcmToken(res.token);
         setNotificationsEnabled(true);
-        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-          navigator.serviceWorker.controller.postMessage({
-            type: 'SCHEDULE_NOTIFICATION',
-            payload: {
-              title: 'Manifest Journal ✨',
-              body: 'Daily reminders activated. Stay anchored to your morning & evening rituals.',
-              delay: 1000,
-            },
-          });
-        }
+        setFcmMessage('Device registered with Firebase Cloud Messaging!');
+      } else {
+        setFcmMessage(res.error || 'Notification permission not granted.');
       }
-    } catch (e) {
-      console.warn('Notification permission error:', e);
+    } catch (e: any) {
+      setFcmMessage(e?.message || 'Error configuring notifications.');
+    } finally {
+      setFcmLoading(false);
     }
+  };
+
+  const handleTestAlert = async () => {
+    const ok = await triggerTestNotification(
+      'Manifest Journal ✨',
+      'Ritual Alert: Firebase notifications are active and connected.'
+    );
+    if (ok) {
+      setFcmMessage('Test alert displayed on your device!');
+    } else {
+      setFcmMessage('Could not trigger test alert. Check browser notification permissions.');
+    }
+  };
+
+  const handleCopyFcmToken = () => {
+    if (!fcmToken) return;
+    navigator.clipboard.writeText(fcmToken).then(() => {
+      setTokenCopied(true);
+      setTimeout(() => setTokenCopied(false), 2500);
+    });
+  };
+
+  const handleToggleNotifications = async () => {
+    await handleEnableFirebaseNotifications();
   };
 
   const handleExportData = async () => {
@@ -392,32 +417,109 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </div>
       </div>
 
-      {/* Notifications Toggle */}
-      <div className="bg-white dark:bg-black p-5 rounded-3xl border border-black/10 dark:border-white/15 shadow-xs flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-accent-container text-accent flex items-center justify-center">
-            <Bell className="w-5 h-5 text-accent" />
+      {/* Notifications & FCM Setup Card */}
+      <div className="bg-white dark:bg-black p-5 rounded-3xl border border-black/10 dark:border-white/15 shadow-xs space-y-4">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-accent-container text-accent flex items-center justify-center shrink-0">
+              <Bell className="w-5 h-5 text-accent" />
+            </div>
+            <div>
+              <h3 className="font-bold text-sm text-[#1b1b1c] dark:text-white">
+                Daily Ritual Alerts & Push Notifications
+              </h3>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300">
+                Morning goals (7:00 AM) & Evening journaling (8:00 PM) via Firebase Cloud Messaging
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="font-bold text-sm text-[#1b1b1c] dark:text-white">
-              Daily Ritual Alerts
-            </h3>
-            <p className="text-[11px] text-slate-600 dark:text-slate-300">
-              Morning goals (7:00 AM) & Evening journaling (8:00 PM)
-            </p>
-          </div>
+
+          <span
+            className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 ${
+              fcmToken || notificationsEnabled
+                ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+            }`}
+          >
+            {fcmToken || notificationsEnabled ? 'Active ✓' : 'Setup Required'}
+          </span>
         </div>
 
-        <button
-          onClick={handleToggleNotifications}
-          className={`px-4 py-2 rounded-full text-xs font-bold transition active:scale-95 ${
-            notificationsEnabled
-              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-              : 'bg-accent text-white shadow-xs'
-          }`}
-        >
-          {notificationsEnabled ? 'Active ✓' : 'Enable'}
-        </button>
+        {fcmMessage && (
+          <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-white/10 text-xs text-slate-700 dark:text-slate-200">
+            {fcmMessage}
+          </div>
+        )}
+
+        {/* Primary Action Button: "Enable Notifications" */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <button
+            onClick={handleEnableFirebaseNotifications}
+            disabled={fcmLoading}
+            className="w-full py-2.5 px-4 rounded-full bg-accent text-white font-bold text-xs shadow-xs hover:opacity-95 active:scale-95 transition flex items-center justify-center gap-2 disabled:opacity-50"
+          >
+            {fcmLoading ? (
+              <>
+                <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                <span>Registering Device...</span>
+              </>
+            ) : fcmToken ? (
+              <>
+                <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Re-Register Device</span>
+              </>
+            ) : (
+              <>
+                <Bell className="w-3.5 h-3.5" />
+                <span>Enable Notifications</span>
+              </>
+            )}
+          </button>
+
+          <button
+            onClick={handleTestAlert}
+            className="w-full py-2.5 px-4 rounded-full border border-slate-300 dark:border-white/20 bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-white text-xs font-bold hover:bg-slate-200 dark:hover:bg-zinc-700 transition active:scale-95 flex items-center justify-center gap-2"
+          >
+            <Send className="w-3.5 h-3.5 text-accent" />
+            <span>Send Test Alert</span>
+          </button>
+        </div>
+
+        {/* Display FCM Token if registered */}
+        {fcmToken && (
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-white/10 flex items-center justify-between gap-2">
+            <div className="min-w-0 flex-1">
+              <span className="block text-[10px] uppercase font-bold text-slate-400">
+                FCM Device Token (Saved in IndexedDB)
+              </span>
+              <code className="text-[10px] font-mono text-slate-700 dark:text-slate-300 truncate block">
+                {fcmToken}
+              </code>
+            </div>
+            <button
+              onClick={handleCopyFcmToken}
+              className="p-1.5 rounded-lg border border-slate-200 dark:border-white/20 hover:bg-slate-100 dark:hover:bg-zinc-800 transition text-slate-600 dark:text-slate-300"
+              title="Copy registration token"
+            >
+              {tokenCopied ? (
+                <Check className="w-3.5 h-3.5 text-emerald-500" />
+              ) : (
+                <Copy className="w-3.5 h-3.5" />
+              )}
+            </button>
+          </div>
+        )}
+
+        <div className="pt-1 flex items-center justify-between text-[11px] text-slate-500">
+          <span>Background Service Worker: <code>firebase-messaging-sw.js</code></span>
+          <a
+            href="#notifications"
+            className="text-accent font-bold hover:underline flex items-center gap-1"
+          >
+            <span>Full Hub</span>
+            <ExternalLink className="w-3 h-3" />
+          </a>
+        </div>
       </div>
 
       {/* Data Export & Backup */}

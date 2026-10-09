@@ -15,6 +15,8 @@ import { applyTheme, applyAccentColor } from './lib/theme';
 import { TopBar, BottomNav } from './components/Navigation';
 import { Drawer } from './components/Drawer';
 import { OfflineIndicator } from './components/OfflineIndicator';
+import { sanitizeRoute } from './security/router-guard.js';
+import { runIntegrityCheck } from './security/db-guard.js';
 
 import { HomeScreen } from './screens/HomeScreen';
 
@@ -42,6 +44,9 @@ const SettingsScreen = React.lazy(() =>
 const CommitmentScreen = React.lazy(() =>
   import('./screens/CommitmentScreen').then((m) => ({ default: m.CommitmentScreen }))
 );
+const NotificationsScreen = React.lazy(() =>
+  import('./screens/NotificationsScreen').then((m) => ({ default: m.NotificationsScreen }))
+);
 const InteractiveUserGuide = React.lazy(() =>
   import('./components/InteractiveUserGuide').then((m) => ({ default: m.InteractiveUserGuide }))
 );
@@ -58,8 +63,8 @@ export default function App() {
   // Navigation State
   const [currentRoute, setCurrentRoute] = useState<string>(() => {
     const hash = window.location.hash.replace('#', '');
-    if (hash) return hash;
-    return sessionStorage.getItem('manifest_active_tab') || 'home';
+    if (hash) return sanitizeRoute(hash);
+    return sanitizeRoute(sessionStorage.getItem('manifest_active_tab') || 'home');
   });
   const [routeState, setRouteState] = useState<any>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -148,14 +153,28 @@ export default function App() {
 
   useEffect(() => {
     refreshData();
+
+    // Run background IDB integrity check
+    if (typeof window !== 'undefined' && window.indexedDB) {
+      try {
+        const req = window.indexedDB.open('manifest-journal-db');
+        req.onsuccess = () => {
+          runIntegrityCheck(req.result).catch((err: any) =>
+            console.warn('[Integrity Check] Skipped:', err)
+          );
+        };
+      } catch (e) {
+        // Suppressed
+      }
+    }
   }, [refreshData]);
 
-  // Handle hash changes
+  // Handle hash changes safely with router guard
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
       if (hash) {
-        setCurrentRoute(hash);
+        setCurrentRoute(sanitizeRoute(hash));
       }
     };
     window.addEventListener('hashchange', handleHashChange);
@@ -163,11 +182,12 @@ export default function App() {
   }, []);
 
   const navigateTo = (route: string, state?: any) => {
-    setCurrentRoute(route);
+    const safeRoute = sanitizeRoute(route);
+    setCurrentRoute(safeRoute);
     setRouteState(state || null);
-    window.location.hash = `#${route}`;
-    if (['scripting', 'journal', 'album', 'teleprompter', 'home'].includes(route)) {
-      sessionStorage.setItem('manifest_active_tab', route);
+    window.location.hash = `#${safeRoute}`;
+    if (['scripting', 'journal', 'album', 'teleprompter', 'home'].includes(safeRoute)) {
+      sessionStorage.setItem('manifest_active_tab', safeRoute);
     }
   };
 
@@ -197,6 +217,8 @@ export default function App() {
         return 'Knowledge';
       case 'settings':
         return 'Settings';
+      case 'notifications':
+        return 'Ritual Alerts & Push';
       case 'commitment':
         return 'Commitment';
       default:
@@ -331,6 +353,10 @@ export default function App() {
               onOpenCovenant={() => navigateTo('commitment')}
               onSettingsChanged={(newSett) => setSettings(newSett)}
             />
+          )}
+
+          {currentRoute === 'notifications' && (
+            <NotificationsScreen onNavigateHome={() => navigateTo('home')} />
           )}
 
           {currentRoute === 'commitment' && (

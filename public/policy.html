@@ -337,20 +337,27 @@
         Media streams are processed entirely in local volatile memory. The raw video and audio streams never leave your device and are never broadcast or streamed across any computer network. When a capture is finalized, the resulting binary file is saved solely into your private OPFS sandbox on your hardware. Media assets captured within Manifest Journal are NOT automatically copied or exposed to your device operating system's general photo library or camera roll, ensuring complete confidentiality from other device applications unless you explicitly tap the "Download" button to manually save a specific file. Whenever a camera or microphone interface is closed, all hardware media tracks are immediately and permanently terminated.
       </p>
 
-      <h2 class="section-heading">6. Notifications and Reminders</h2>
+      <h2 class="section-heading">6. Notifications, Reminders & Firebase Cloud Messaging (FCM)</h2>
       <p>
-        Manifest Journal provides optional daily ritual reminders (such as morning goal setting and evening journaling reflection). These notifications are generated entirely on-device by the registered Progressive Web App Service Worker (<code>sw.js</code>). The application does not utilize any external Web Push server, does not maintain a cloud notification delivery pipeline, and does not register a push subscription token with any remote service.
+        Manifest Journal provides optional daily ritual reminders (such as morning goal setting at 7:00 AM and evening journaling reflection at 8:00 PM) powered by Google Firebase Cloud Messaging (FCM) and a dedicated background service worker (<code>firebase-messaging-sw.js</code>).
       </p>
       <p>
-        Permission to display notifications is requested only after you intentionally complete your personal Commitment ceremony. You retain full control over this capability at all times; revoking notification permissions in your browser or operating system settings instantly and permanently silences all scheduled local alerts without impacting any other app functionality.
+        When you choose to tap "Enable Notifications", your browser requests permission to display alerts. Upon approval, the application requests an anonymous device registration token from Firebase Cloud Messaging using an authorized Web Push VAPID key. This token is persisted strictly inside your local device's IndexedDB database (under the <code>settings</code> store) so the application remembers your device is enrolled.
+      </p>
+      <p>
+        <strong>Strict Privacy Guarantees:</strong> The push notification pipeline is strictly an alert signaling conduit. Your written journal reflections, personal goals, scripting notebook entries, photos, and video affirmations are NEVER transmitted to Firebase, Google, or any remote server. The background service worker (<code>firebase-messaging-sw.js</code>) listens for incoming push signals and invokes your browser's native notification display (<code>self.registration.showNotification()</code>) locally on your hardware. You maintain absolute sovereignty over this feature; revoking notification permissions in your browser or operating system settings instantly stops all alerts without impacting your local journals or files.
       </p>
 
       <h2 class="section-heading">7. Third-Party Services</h2>
       <p>
-        Manifest Journal avoids third-party dependencies. The only external network resource queried by the application is Google Fonts (hosted across <code>fonts.googleapis.com</code> and <code>fonts.gstatic.com</code>) to deliver the typographic Roboto typeface stylesheet. When you first load the application online, your browser issues a standard HTTP request to Google's content delivery servers, transmitting your temporary IP address as part of normal web routing. Once downloaded, the application Service Worker caches the font files locally within browser cache storage, and Google's servers are never contacted again during subsequent offline or online launches. For information on how Google handles font network requests, you may consult <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>.
+        Manifest Journal minimizes external dependencies to uphold local-first principles. The external network resources utilized by the application are strictly limited to:
       </p>
+      <ul>
+        <li><strong>Google Fonts:</strong> Typographic stylesheets for the Roboto font family (hosted across <code>fonts.googleapis.com</code> and <code>fonts.gstatic.com</code>). Font files are cached locally by the Service Worker for offline use.</li>
+        <li><strong>Google Firebase Cloud Messaging (FCM):</strong> Push notification delivery infrastructure (<code>fcmregistrations.googleapis.com</code> and <code>firebaseinstallations.googleapis.com</code>) used solely to route ritual alerts to your device via an anonymous registration token. No personal data or user-authored manuscripts are ever shared.</li>
+      </ul>
       <p>
-        The Knowledge screen contains informative educational text on manifestation principles. Manifest Journal loads zero third-party tracking scripts, zero social media pixels, zero software development kits (SDKs), and zero third-party advertising frameworks.
+        Manifest Journal loads zero third-party tracking scripts, zero social media analytics pixels, zero advertising SDKs, and zero behavioral telemetry tools.
       </p>
 
       <h2 class="section-heading">8. Data Export and Portability</h2>
@@ -441,9 +448,12 @@
         Certain optional capabilities within Manifest Journal—specifically capturing your commitment selfie, taking manifestation photographs, recording affirmation videos, and rehearsing teleprompter scripts—require client access to your device camera and microphone hardware. You grant the application temporary client-side permission to stream media feeds strictly while you are actively utilizing those features. The developer does not receive, view, or intercept any audio or video stream. You maintain the right to revoke camera and microphone permissions at any time through your web browser or operating system privacy settings.
       </p>
 
-      <h2 class="section-heading">7. Notification Permissions</h2>
+      <h2 class="section-heading">7. Notification Permissions & Firebase Cloud Messaging (FCM)</h2>
       <p>
-        Manifest Journal allows you to enable optional client-side browser notifications to alert you to scheduled morning and evening manifestation rituals. All notification timing and delivery mechanisms are executed strictly on your local hardware by the registered Service Worker without external communication. You may grant or deny this permission at your discretion and may revoke notification capabilities at any time through your browser settings without penalty.
+        Manifest Journal enables optional push notifications to remind you of scheduled morning intention anchors and evening journaling reflections. By clicking "Enable Notifications", you authorize the application to request browser notification permissions and generate an anonymous device registration token via Google Firebase Cloud Messaging (FCM).
+      </p>
+      <p>
+        This token is stored locally within your device's IndexedDB database and is used solely to route ritual alerts to your registered background service worker (<code>firebase-messaging-sw.js</code>). The push notification service is provided without warranty, fee, or commercial advertising. You retain full authority to grant, refuse, or revoke notification permissions at any time through your web browser or operating system preferences without restriction or loss of any core journaling, scripting, or goal-tracking features.
       </p>
 
       <h2 class="section-heading">8. Disclaimer of Warranties (MIT License)</h2>

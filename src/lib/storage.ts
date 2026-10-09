@@ -627,3 +627,22 @@ export async function clearAllDatabase(): Promise<void> {
   // Clear volatile memory store
   Object.values(volatileMemoryStore).forEach((m) => m.clear());
 }
+
+// ── FCM Push Notification Token ──
+export async function saveFCMToken(token: string): Promise<void> {
+  const cleanToken = sanitizeText(token);
+  if (!cleanToken) return;
+  await setSetting('fcm_registration_token', cleanToken);
+  await setSetting('fcm_token_registered_at', new Date().toISOString());
+}
+
+export async function getFCMToken(): Promise<string | null> {
+  const token = await getSetting<string | null>('fcm_registration_token', null);
+  return token ? sanitizeText(token) : null;
+}
+
+export async function removeFCMToken(): Promise<void> {
+  await setSetting('fcm_registration_token', null);
+  await setSetting('fcm_token_registered_at', null);
+}
+

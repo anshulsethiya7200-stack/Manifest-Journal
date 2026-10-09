@@ -13,6 +13,7 @@ export const ALLOWED_ROUTES = [
   'knowledge',
   'commitment',
   'settings',
+  'notifications',
 ];
 
 /**

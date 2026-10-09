@@ -158,3 +158,27 @@ Zero backend, zero authentication, zero server. 100% of user data lives in the u
   - **Vendor Bundle Splitting (`vite.config.ts`)**: Configured manual rollup chunks isolating `vendor-react`, `vendor-icons`, `vendor-idb`, and `vendor-jszip` to leverage long-term caching and parallelized script parsing. Heavy libraries like `JSZip` are deferred exclusively to the Settings export flow.
   - **Non-Render-Blocking Webfont (`index.html`)**: Replaced blocking variable `Roboto Flex` stylesheet with lean, asynchronous `Roboto:wght@300;400;500;700` using `media="print" onload="this.media='all'"` and `display=swap`, eliminating ~900ms of critical render-blocking delay from FCP and LCP.
   - **Luminance-Aware High Contrast Button Classes**: Configured `.bg-accent` with automatic `text-on-accent` color inheritance and strict $L > 0.179$ threshold, maintaining guaranteed WCAG AA color contrast across all sacred color selections.
+
+---
+
+## Firebase Push Notification Service & FCM Integration
+- **Client Configuration & Secrets Isolation**:
+  - Firebase configuration securely externalized into `.env` with `VITE_FIREBASE_*` environment keys:
+    - API Key, Auth Domain, Project ID (`manifest-journal-9bb90`), Storage Bucket, Messaging Sender ID (`338855149178`), App ID (`1:338855149178:web:23b6be17010acc887085c3`), Measurement ID (`G-EL3V0ENWEC`).
+    - VAPID Key: `BLKx1En_SrvgqjSjUsd0y3kFIxh3KNqDz9GTLHtmaEODTZX54dJj18ubBf5GBi_WpSplgbL8NysrU3QaWUUfXEo`.
+  - `.env.example` updated with complete parameter documentation and sanitized empty values.
+- **Background Service Worker (`public/firebase-messaging-sw.js` & `firebase-messaging-sw.js`)**:
+  - Integrates Firebase App and Messaging Compat SDK v10.14.1 via `importScripts()`.
+  - Implements `messaging.onBackgroundMessage()` displaying notifications through `self.registration.showNotification()`.
+  - Implements `notificationclick` handler focusing or opening the app window on alert interaction.
+- **Local-First Device Token Storage (`src/lib/storage.ts`)**:
+  - FCM device registration token saved strictly on the local device in IndexedDB (`manifest-journal-db` -> `settings` store under `fcm_registration_token`).
+  - Implemented helper functions `saveFCMToken(token)`, `getFCMToken()`, and `removeFCMToken()`.
+- **UI & Activation Workflow (`src/lib/firebase.ts`, `src/screens/NotificationsScreen.tsx`, `src/screens/SettingsScreen.tsx`)**:
+  - Dedicated "Enable Notifications" HTML buttons triggering permission request, token generation, and IndexedDB persistence.
+  - Interactive status feedback, FCM token display with one-touch clipboard copy, and test alert triggers.
+  - Added dedicated `NotificationsScreen` route (`#notifications`) in `ALLOWED_ROUTES` and Navigation Drawer.
+- **Legal Policies & Terms of Use Update (`public/policy.html`)**:
+  - Updated Section 6 & 7 of Privacy Policy detailing FCM push signaling, anonymous device tokens, local-only storage, and zero-manuscript transmission.
+  - Updated Section 7 of Terms of Use documenting push notification delivery via Firebase and user control to revoke permissions.
+

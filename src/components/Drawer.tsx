@@ -12,6 +12,7 @@ import {
   Sparkles,
   Flame,
   Compass,
+  Bell,
 } from 'lucide-react';
 
 interface DrawerProps {
@@ -184,6 +185,17 @@ export const Drawer: React.FC<DrawerProps> = ({
                 App & Data
               </p>
               <div className="space-y-1">
+                <button
+                  onClick={() => handleNav('notifications')}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${
+                    activeRoute === 'notifications'
+                      ? 'bg-accent text-white font-bold shadow-xs'
+                      : 'hover:bg-black/5 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300'
+                  }`}
+                >
+                  <Bell className={`w-4 h-4 ${activeRoute === 'notifications' ? 'text-white' : 'text-accent'}`} />
+                  <span>Ritual Alerts & Push</span>
+                </button>
                 <button
                   onClick={() => handleNav('settings')}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${
