@@ -12,6 +12,7 @@
   "lang": "en",
   "dir": "ltr",
   "id": "manifest-journal-pwa-v1",
+  "gcm_sender_id": "103953800507"
   "categories": ["lifestyle", "productivity", "health"],
   "screenshots": [
     {

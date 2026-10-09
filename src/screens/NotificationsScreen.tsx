@@ -12,12 +12,7 @@ import {
   Smartphone,
   RefreshCw,
 } from 'lucide-react';
-import {
-  enableFirebaseNotifications,
-  triggerTestNotification,
-  getExistingFCMToken,
-  isMessagingSupported,
-} from '../lib/firebase';
+import { useFirebaseNotifications } from '../hooks/useFirebaseNotifications';
 import { getSetting, setSetting } from '../lib/storage';
 
 interface NotificationsScreenProps {
@@ -25,12 +20,15 @@ interface NotificationsScreenProps {
 }
 
 export const NotificationsScreen: React.FC<NotificationsScreenProps> = () => {
-  const [fcmToken, setFcmToken] = useState<string | null>(null);
-  const [isSupported, setIsSupported] = useState<boolean>(true);
-  const [permissionState, setPermissionState] = useState<NotificationPermission>(
-    typeof window !== 'undefined' && 'Notification' in window ? Notification.permission : 'default'
-  );
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const {
+    isSupported,
+    token: fcmToken,
+    loading: isLoading,
+    error: fcmError,
+    enableNotifications,
+    testNotification,
+  } = useFirebaseNotifications();
+
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copied, setCopied] = useState<boolean>(false);
@@ -39,14 +37,6 @@ export const NotificationsScreen: React.FC<NotificationsScreenProps> = () => {
 
   useEffect(() => {
     (async () => {
-      const supported = await isMessagingSupported();
-      setIsSupported(supported);
-
-      const storedToken = await getExistingFCMToken();
-      if (storedToken) {
-        setFcmToken(storedToken);
-      }
-
       const morning = await getSetting<boolean>('reminder_morning', true);
       const evening = await getSetting<boolean>('reminder_evening', true);
       setMorningReminder(morning);
@@ -55,31 +45,19 @@ export const NotificationsScreen: React.FC<NotificationsScreenProps> = () => {
   }, []);
 
   const handleEnableNotifications = async () => {
-    setIsLoading(true);
     setStatusMessage('Requesting notification permission & generating device token...');
     setErrorMessage(null);
 
-    try {
-      const result = await enableFirebaseNotifications();
-      if (result.success && result.token) {
-        setFcmToken(result.token);
-        setPermissionState('granted');
-        setStatusMessage('Push notifications enabled & device registered in IndexedDB!');
-      } else {
-        setErrorMessage(result.error || 'Failed to register device for push notifications.');
-        if (result.permission) {
-          setPermissionState(result.permission);
-        }
-      }
-    } catch (err: any) {
-      setErrorMessage(err?.message || 'An unexpected error occurred during setup.');
-    } finally {
-      setIsLoading(false);
+    const result = await enableNotifications();
+    if (result.success && result.token) {
+      setStatusMessage('Push notifications enabled & device registered in IndexedDB!');
+    } else {
+      setErrorMessage(result.error || 'Failed to register device for push notifications.');
     }
   };
 
   const handleTestNotification = async () => {
-    const success = await triggerTestNotification(
+    const success = await testNotification(
       'Manifest Journal ✨',
       'Ritual Alert: Take 3 deep breaths and reconnect with your daily intentions.'
     );
